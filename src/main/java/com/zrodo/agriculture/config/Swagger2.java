@@ -1,7 +1,7 @@
 package com.zrodo.agriculture.config;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -10,8 +10,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-//@Configuration
-@EnableAutoConfiguration
+@Configuration
 @EnableSwagger2
 public class Swagger2 {
 
@@ -20,14 +19,14 @@ public class Swagger2 {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.forezp.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.zrodo.agriculture.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("springboot利用swagger构建api文档")
-                .description("简单优雅的restfun风格，http://blog.csdn.net/forezp")
+                .title("农业口新平台api文档")
+                .description("新平台")
                 .termsOfServiceUrl("http://www.zrodo.com")
                 .version("1.0")
                 .build();

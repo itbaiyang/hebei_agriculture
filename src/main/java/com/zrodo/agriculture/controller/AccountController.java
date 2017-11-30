@@ -39,8 +39,8 @@ public class AccountController {
         String json;
         try
         {
-            account = Tool.getStrFromBase64(account);
-            password = Tool.getStrFromBase64(password);
+//            account = Tool.getStrFromBase64(account);
+//            password = Tool.getStrFromBase64(password);
             AccountInfo accountInfo = userMapper.queryUserByAccount(account);
             if (accountInfo == null)
             {
