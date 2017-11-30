@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zrodo.agriculture.repository.UserMapper">
+    <insert id="addUser">
+        INSERT INTO sys_user(account,userName,password,type,deptId,companyId,roleId,createDate,phoneNumber)
+            VALUE (#{account},#{userName},#{password},#{type},#{deptId},#{companyId},#{roleId},#{createDate},#{phoneNumber})
+    </insert>
+
+    <delete id="deleteUser">
+        DELETE FROM sys_user WHERE userId = #{userId}
+    </delete>
+
+    <update id="updateUser">
+        UPDATE sys_user SET
+            userName = #{userName},
+            password = #{password},
+            phoneNumber = #{phoneNumber}
+        WHERE userId = #{userId}
+    </update>
+
+    <select id="queryUserListByDept">
+        SELECT
+            userId,
+            account,
+            userName,
+            su.createDate,
+            phoneNumber
+        FROM sys_user su
+            LEFT JOIN sys_dept sd ON su
+        WHERE deptId = #{deptId}
+        ORDER BY createDate
+        LIMIT #{startNo},#{pageSize}
+    </select>
+    <select id="queryUserListByCompany">
+        SELECT *
+        FROM sys_user
+        WHERE companyId = #{companyId}
+        LIMIT #{startNo},#{pageSize}
+    </select>
+    <select id="queryUserById">
+        SELECT *
+        FROM sys_user
+        WHERE userId = #{userId}
+    </select>
+
+    <select id="queryUserByAccount" resultType="com.zrodo.agriculture.domain.AccountInfo" parameterType="com.zrodo.agriculture.domain.AccountInfo">
+        SELECT account,userName,password,type,deptId,companyId,roleId,phoneNumber
+        FROM sys_user
+        WHERE account = #{account}
+    </select>
+</mapper>
