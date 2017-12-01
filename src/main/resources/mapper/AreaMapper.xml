@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zrodo.agriculture.repository.AreaMapper">
+
+    <insert id="insertArea">
+      INSERT INTO sys_area(areaNo,areaName,pId,levelId,createDate) VALUE (#{areaNo},#{areaName},#{pId},#{levelId},NOW())
+    </insert>
+
+    <delete id="deleteArea">
+      DELETE FROM sys_area WHERE areaId = #{areaId}
+    </delete>
+    <delete id="deleteAreaList">
+        DELETE FROM sys_area WHERE areaNo LIKE '${areaNo}%'
+    </delete>
+    <update id="updateArea">
+      UPDATE sys_area
+      SET areaNo = #{areaNo},
+          areaName = #{areaName},
+          pId = #{pId},
+          levelId = #{levelId}
+      WHERE areaId = #{areaId}
+    </update>
+
+    <select id="queryAreaList">
+        SELECT *
+        FROM sys_area
+        <where>
+            <if test="pId!=null and pId!='' ">
+                pId = #{pId}
+            </if>
+        </where>
+        ORDER BY level, orderId DESC
+        LIMIT #{startNo},#{pageSize}
+    </select>
+
+    <select id="queryAreaById">
+        SELECT *
+        FROM sys_area
+        WHERE areaId = #{areaId}
+    </select>
+
+    <select id="getCityListById" resultType="com.zrodo.agriculture.entity.SysCity">
+        SELECT *
+        FROM sys_city
+        WHERE cityId LIKE '${cityId}%'
+    </select>
+</mapper>

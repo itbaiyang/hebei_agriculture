@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zrodo.agriculture.repository.MessageWebMapper">
+    <insert id="addMessageWeb">
+        INSERT INTO message_web(title,content,userId,typeId,deptId,createDate,contentFont)
+        VALUE (#{title},#{content},#{userId},#{typeId},#{deptId},#{createDate},#{contentFont})
+    </insert>
+
+    <delete id="deleteMessageWeb">
+        DELETE FROM message_web WHERE messageId = #{messageId}
+    </delete>
+
+    <update id="updateMessageWeb">
+        UPDATE message_web
+        SET title = #{title},
+            content = #{content},
+            typeId = #{typeId},
+            contentFont = #{contentFont}
+        WHERE messageId = #{messageId}
+    </update>
+
+    <update id="modifyPublishStatus">
+        UPDATE message_web
+        SET pustatus = #{pustatus}
+        WHERE messageId = #{messageId}
+    </update>
+
+    <update id="modifyShowStatus">
+        UPDATE message_web
+        SET isShow = #{isShow}
+        WHERE messageId = #{messageId}
+    </update>
+
+    <select id="queryMessageWebList">
+        SELECT
+        messageId,
+        title,
+        contentFont,
+        content,
+        mt.typeName,
+        su.userName,
+        sd.deptName,
+        mw.createDate
+        FROM message_web mw
+        LEFT JOIN sys_user su ON mw.userId = su.userId
+        LEFT JOIN sys_dept sd ON mw.deptId = sd.deptId
+        LEFT JOIN message_type mt ON mw.typeId = mt.typeId
+        <where>
+            <if test="typeId!= null and typeId!= '' ">
+                typeId = #{typeId}
+            </if>
+            <if test="pustatus!=null and pustatus!='' ">
+                AND pustatus = #{pustatus}
+            </if>
+        </where>
+        ORDER BY createDate DESC
+        LIMIT #{startNo},#{pageSize}
+    </select>
+
+    <select id="queryDeptById">
+        SELECT
+        messageId,
+        title,
+        contentFont,
+        content,
+        su.userName,
+        sd.deptName,
+        mw.createDate
+        FROM message_web mw
+        LEFT JOIN sys_user su ON mw.userId = su.userId
+        LEFT JOIN sys_dept sd ON mw.deptId = sd.deptId
+        WHERE messageId = #{messageId}
+    </select>
+</mapper>

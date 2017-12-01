@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zrodo.agriculture.repository.RoleMapper">
+
+    <insert id="addRole">
+        INSERT INTO sys_role(roleName,expl,level,createDate,type)
+        VALUE (#{roleName},#{explain},#{level},#{createDate},#{type})
+    </insert>
+
+    <delete id="deleteRole">
+        DELETE FROM sys_role WHERE roleId = #{roleId}
+    </delete>
+
+    <update id="updateRole">
+        UPDATE sys_role SET
+            roleName = #{roleName},
+            expl = #{explain}
+        WHERE roleId = #{roleId}
+    </update>
+
+    <select id="queryRoleList">
+        SELECT * FROM sys_user
+        WHERE deptId = #{deptId}
+        ORDER BY createDate
+        LIMIT #{startNo},#{pageSize}
+    </select>
+
+    <select id="queryRoleListByLevel">
+        SELECT * FROM sys_user
+        WHERE deptId = #{deptId}
+        ORDER BY createDate
+        LIMIT #{startNo},#{pageSize}
+    </select>
+
+    <select id="queryRoleById">
+        SELECT * FROM sys_role WHERE roleId = #{roleId}
+    </select>
+</mapper>

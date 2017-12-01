@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zrodo.agriculture.repository.ProductiveGlsqMapper">
+
+    <insert id="addGlsq">
+        INSERT INTO productive_standard_glsq(standardId,objectId,glsqName,subject,requirement,createDate)
+        VALUE (#{standardId},#{objectId},#{glsqName},#{subject},#{requirement},#{createDate})
+    </insert>
+
+    <delete id="deleteGlsq">
+        DELETE FROM productive_standard_glsq WHERE glsqId = #{glsqId}
+    </delete>
+
+    <update id="updateGlsq">
+        UPDATE productive_standard_glsq
+        SET glsqName = #{glsqName},
+            subject = #{subject},
+            requirement = #{requirement}
+        WHERE glsqId = #{glsqId}
+    </update>
+
+    <select id="queryGlsqListByStandard" resultType="HashMap">
+        SELECT
+        glsqId,
+        glsqName,
+        ps.standardId,
+        ps.name AS standardName,
+        psg.createDate,
+        subject,
+        requirement
+        FROM productive_standard_glsq psg
+        LEFT JOIN productive_standard ps ON psg.standardId = ps.standardId
+        WHERE psg.standardId = #{standardId}
+        ORDER BY createDate
+    </select>
+
+    <select id="queryGlsqById" resultType="HashMap">
+        SELECT
+            glsqId,
+            glsqName,
+            ps.standardId,
+            ps.name AS standardName,
+            psg.createDate,
+            subject,
+            requirement
+        FROM productive_standard_glsq psg
+            LEFT JOIN productive_standard ps ON psg.standardId = ps.standardId
+        WHERE glsqId = #{glsqId}
+    </select>
+</mapper>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zrodo.agriculture.repository.DeptMapper">
+    <insert id="addDept">
+        INSERT INTO sys_dept(deptNo,deptName,areaId,pId,levelId,address,contact,contactNumber,createDate,principal,principalNumber)
+        VALUE (#{deptNo},#{deptName},#{areaId},#{pId},#{levelId},#{address},#{contact},#{contactNumber},#{createDate},#{principal},#{principalNumber})
+    </insert>
+
+    <delete id="deleteDept">
+        DELETE FROM sys_dept WHERE deptId = #{deptId}
+    </delete>
+
+    <update id="updateDept">
+        UPDATE sys_dept
+        SET deptNo = #{deptNo},
+            deptName = #{deptName},
+            address = #{address},
+            contact = #{contact},
+            contactNumber = #{contactNumber},
+            principal = #{principal},
+            principalNumber = #{principalNumber}
+        WHERE deptId = #{deptId}
+    </update>
+
+    <select id="queryDeptList" resultType="java.util.HashMap" statementType="CALLABLE">
+        SELECT
+        deptId,
+        deptNo,
+        deptName,
+        sd.levelId,
+        sdl.levelName,
+        sd.areaId,
+        sa.areaName,
+        sd.pId,
+        address,
+        contact,
+        contactNumber,
+        principal,
+        principalNumber,
+        sd.createDate,
+        prodctType
+        FROM sys_dept sd
+        LEFT JOIN sys_dept_level sdl ON sd.levelId = sdl.levelId
+        LEFT JOIN sys_area sa ON sd.areaId = sa.areaId
+        <where>
+            <if test="areaId!= null and areaId!= '' ">
+                sd.areaId = #{areaId}
+            </if>
+            <if test="pId!=null and pId!='' ">
+                AND sd.pId = #{pId}
+            </if>
+        </where>
+        ORDER BY level
+        LIMIT #{startNo},#{pageSize}
+    </select>
+
+    <select id="queryDeptById" resultType="java.util.HashMap" statementType="CALLABLE">
+        SELECT
+        deptId,
+        deptNo,
+        deptName,
+        sd.levelId,
+        sdl.levelName,
+        sd.areaId,
+        sa.areaName,
+        sd.pId,
+        address,
+        contact,
+        contactNumber,
+        principal,
+        principalNumber,
+        sd.createDate,
+        prodctType,
+        GROUP_CONCAT(pt.typeName) AS typeName
+        FROM sys_dept sd
+        LEFT JOIN sys_dept_level sdl ON sd.levelId = sdl.levelId
+        LEFT JOIN sys_area sa ON sd.areaId = sa.areaId
+        LEFT JOIN product_type pt ON sd.prodctType &amp; pt.typeId &gt; 0
+        WHERE deptId = #{deptId}
+        GROUP BY deptId
+    </select>
+</mapper>

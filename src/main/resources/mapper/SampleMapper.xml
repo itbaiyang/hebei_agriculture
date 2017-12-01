@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zrodo.agriculture.repository.SampleMapper">
+
+    <insert id="addSample">
+        INSERT INTO sample(sampleNo,productId,objectId,sampleId,sampleUrl,sampleVideoUrl,sampleSource,
+                           sampleTemp,cUserId,createDate)
+        VALUE (#{sampleNo},#{productId},#{objectId},#{sampleId},#{sampleUrl},#{sampleVideoUrl},#{sampleSource},
+        #{sampleTemp},#{cUserId},#{createDate})
+    </insert>
+
+    <delete id="deleteSample">
+        DELETE FROM sample WHERE id = #{id}
+    </delete>
+
+    <!--应该用不到，如果添加后台管理可以备用-->
+    <update id="updateSample">
+        UPDATE sample
+        SET productId = #{productId},
+            objectId = #{objectId},
+            sampleUrl = #{sampleUrl},
+            sampleVideoUrl = #{sampleVideoUrl},
+            sampleSource = #{sampleSource},
+            sampleTemp = #{sampleTemp},
+            cUserId = #{cUserId},
+            createDate = #{createDate}
+        WHERE id = #{id}
+    </update>
+
+    <select id="querySampleList" resultType="HashMap">
+        SELECT
+        s.id,
+        s.sampleNo,
+        s.sampleSource,
+        p.productNo,
+        sc.companyName,
+        po.objectName,
+        su.userName AS cUserName
+        FROM sample s
+        LEFT JOIN product_object po ON s.objectId = po.objectId
+        LEFT JOIN product p ON s.productId = p.id
+        LEFT JOIN sys_company sc ON p.companyId = sc.companyId
+        LEFT JOIN sys_user su ON p.cUserId = su.userId
+        <where>
+            <if test="areaId!= null and areaId!= '' ">
+                sc.areaId = #{areaId}
+            </if>
+            <if test="companyId!= null and companyId!= '' ">
+                p.companyId = #{companyId}
+            </if>
+            <if test="objectId!=null and objectId!='' ">
+                AND objectId = #{objectId}
+            </if>
+            <if test="flag!=null and flag!='' ">
+                AND flag = #{flag}
+            </if>
+        </where>
+        ORDER BY createDate
+        LIMIT #{startNo},#{pageSize}
+    </select>
+
+    <select id="querySampleListByProduct" resultType="HashMap">
+        SELECT
+        s.id,
+        s.sampleNo,
+        s.sampleSource,
+        p.productNo,
+        sc.companyName,
+        po.objectName,
+        su.userName AS cUserName
+        FROM sample s
+        LEFT JOIN product_object po ON s.objectId = po.objectId
+        LEFT JOIN product p ON s.productId = p.id
+        LEFT JOIN sys_company sc ON p.companyId = sc.companyId
+        LEFT JOIN sys_user su ON p.cUserId = su.userId
+        WHERE productId = #{productId}
+        ORDER BY createDate
+        LIMIT #{startNo},#{pageSize}
+    </select>
+
+    <select id="querySampleById" resultType="HashMap">
+        SELECT
+            s.id,
+            s.sampleNo,
+            s.latitude,
+            s.longitude,
+            s.address,
+            s.sampleUrl,
+            s.sampleVideoUrl,
+            s.sampleTemp,
+            s.sampleSource,
+            p.productNo,
+            sc.companyName,
+            po.objectName,
+            su.userName AS cUserName
+        FROM sample s
+            LEFT JOIN product_object po ON s.objectId = po.objectId
+            LEFT JOIN product p ON s.productId = p.id
+            LEFT JOIN sys_company sc ON p.companyId = sc.companyId
+            LEFT JOIN sys_user su ON p.cUserId = su.userId
+        WHERE s.id = #{id}
+        ORDER BY createDate
+        LIMIT #{startNo},#{pageSize}
+    </select>
+</mapper>

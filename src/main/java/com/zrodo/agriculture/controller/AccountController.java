@@ -26,10 +26,13 @@ public class AccountController {
 
     @Value("${token.expire.time}")
     private Long expireTime;
+
     @Autowired
     private UserMapper userMapper;
+
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+
     @PostMapping(value = "/login")
     @ApiOperation(value = "登录", notes = "登录")
     public String login(HttpServletRequest request,
@@ -58,7 +61,8 @@ public class AccountController {
                 map.put("token", token);
                 ObjectMapper mapper = new ObjectMapper();
                 json = mapper.writeValueAsString(map);
-                redisTemplate.boundValueOps(token).set(mapper.writeValueAsString(accountInfo), expireTime, TimeUnit.MINUTES);
+                redisTemplate.boundValueOps(token)
+                        .set(mapper.writeValueAsString(accountInfo), expireTime, TimeUnit.MINUTES);
             }
         }
         catch(Exception e)
@@ -69,7 +73,7 @@ public class AccountController {
     }
 
     @ResponseBody
-    @GetMapping(value = "/hello")
+    @GetMapping(value = "/logout")
     @ApiOperation(value = "ff", notes = "ff")
     public String hello()
     {

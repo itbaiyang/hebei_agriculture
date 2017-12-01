@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zrodo.agriculture.repository.ReviewReportMapper">
+
+    <insert id="addReviewReport">
+        INSERT INTO detect_review(detectId,reviewUserId,reviewReagentId,reviewResultId,reviewDate,reviewReason,reasonId,
+                                  videoUrl,reviewPicture)
+        VALUE (#{detectId},#{reviewUserId},#{reviewReagentId},#{reviewResultId},#{reviewDate},#{reviewReason},#{reasonId},
+        #{videoUrl},#{reviewPicture})
+    </insert>
+
+    <delete id="deleteReviewReport">
+        DELETE FROM detect_review WHERE detectId = #{detectId}
+    </delete>
+
+    <!--应该用不到，如果添加后台管理可以备用-->
+    <update id="updateReviewReport">
+        UPDATE detect_review
+        SET detectId = #{detectId}
+        WHERE id = #{id}
+    </update>
+
+    <!--TODO:复核记录是否可以只从检测记录里查询-->
+    <select id="queryReviewReportList" resultType="HashMap">
+        SELECT * FROM detect_review d2
+    </select>
+
+    <select id="queryReviewReportListBySample" resultType="HashMap">
+        SELECT
+        d.detectId,
+        sc.name AS companyName,
+        po.objectName,
+        d.sampleId,
+        di.itemName,
+        dr.reagentName,
+        pt.name AS productType,
+        ds.sourceName,
+        dre.resultName,
+        su.name AS cUserName,
+        d.reviewFlag,
+        d.detectDate
+        FROM detect_report d
+        LEFT JOIN product_object po ON d.objectId = po.objectId
+        LEFT JOIN sys_company sc ON d.companyId = sc.companyId
+        LEFT JOIN sys_user su ON d.detectUserId = su.userId
+        LEFT JOIN detect_item di ON d.itemId = di.itemId
+        LEFT JOIN detect_reagent dr ON d.reagentId = dr.reagentId
+        LEFT JOIN product_type pt ON d.productTypeId = pt.productTypeId
+        LEFT JOIN detect_source ds ON d.sourceId = ds.sourceId
+        <choose>
+            <when test="reviewFlag == '1'">
+                LEFT JOIN detect_review dd ON d.detectId = dd.detectId
+                LEFT JOIN detect_result dre ON dd.reviewResultId = dre.resultId
+            </when>
+            <otherwise>
+                LEFT JOIN detect_result dre ON d.resultId = dre.resultId
+            </otherwise>
+        </choose>
+
+        WHERE d.sampleId = #{sampleId}
+        <if test="itemId!=null and itemId!='' ">
+            AND d.itemId = #{itemId}
+        </if>
+        <if test="resultId!=null and resultId!='' ">
+            AND d.resultId = #{resultId}
+        </if>
+        ORDER BY createDate
+        LIMIT #{startNo},#{pageSize}
+    </select>
+
+    <select id="queryReviewReportById" resultType="HashMap">
+        SELECT * FROM detect_review d2
+        WHERE d2.id = #{id}
+    </select>
+
+    <select id="queryReviewReportByDetectId" resultType="HashMap">
+        SELECT * FROM detect_review d2
+        WHERE d2.detectId = #{detectId}
+    </select>
+</mapper>

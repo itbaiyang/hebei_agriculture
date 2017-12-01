@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zrodo.agriculture.repository.DetectReportMapper">
+
+    <insert id="addDetectReport">
+        INSERT INTO detect_report(sampleId,companyId,productTypeId,itemId,reagentId,objectId,sourceId,resultId,
+                                  imageUrl,detectUserId,detectDate)
+        VALUE (#{sampleId},#{companyId},#{productTypeId},#{itemId},#{reagentId},#{objectId},#{sourceId},#{resultId},
+                           #{imageUrl},#{detectUserId},#{detectDate})
+    </insert>
+
+    <delete id="deleteDetectReport">
+        DELETE FROM detect_report WHERE detectId = #{detectId}
+    </delete>
+
+    <!--应该用不到，如果添加后台管理可以备用-->
+    <update id="updateDetectReport">
+        UPDATE detect_report
+        SET sampleId = #{sampleId}
+        WHERE detectId = #{detectId}
+    </update>
+
+    <select id="queryDetectReportList" resultType="HashMap">
+        SELECT
+        d.detectId,
+        sc.companyName,
+        po.objectName,
+        d.sampleId,
+        di.itemName,
+        dr.reagentName,
+        pt.typeName AS productTypeName,
+        ds.sourceName,
+        dre.resultName,
+        su.userName AS cUserName,
+        d.reviewFlag,
+        d.detectDate
+        FROM detect_report d
+        LEFT JOIN product_object po ON d.objectId = po.objectId
+        LEFT JOIN sys_company sc ON d.companyId = sc.companyId
+        LEFT JOIN sys_user su ON d.detectUserId = su.userId
+        LEFT JOIN detect_item di ON d.itemId = di.itemId
+        LEFT JOIN detect_reagent dr ON d.reagentId = dr.reagentId
+        LEFT JOIN product_type pt ON d.productTypeId = pt.typeId
+        LEFT JOIN detect_source ds ON d.sourceId = ds.sourceId
+        <choose>
+            <when test="reviewFlag == '1'">
+                LEFT JOIN detect_review d2 ON d.detectId = d2.detectId
+                LEFT JOIN detect_result dre ON d2.reviewResultId = dre.resultId
+            </when>
+            <otherwise>
+                LEFT JOIN detect_result dre ON d.resultId = dre.resultId
+            </otherwise>
+        </choose>
+        <where>
+            <if test="areaId!= null and areaId!= '' ">
+                sc.areaId = #{areaId}
+            </if>
+            <if test="companyId!= null and companyId!= '' ">
+                p.companyId = #{companyId}
+            </if>
+            <if test="objectId!=null and objectId!='' ">
+                AND objectId = #{objectId}
+            </if>
+            <if test="itemId!=null and itemId!='' ">
+                AND itemId = #{itemId}
+            </if>
+            <if test="resultId!=null and resultId!='' ">
+                AND resultId = #{resultId}
+            </if>
+        </where>
+        ORDER BY createDate
+        LIMIT #{startNo},#{pageSize}
+    </select>
+
+    <select id="queryDetectReportListBySample" resultType="HashMap">
+        SELECT
+        d.detectId,
+        sc.name AS companyName,
+        po.objectName,
+        d.sampleId,
+        di.itemName,
+        dr.reagentName,
+        pt.name AS productType,
+        ds.sourceName,
+        dre.resultName,
+        su.name AS cUserName,
+        d.reviewFlag,
+        d.detectDate
+        FROM detect_report d
+        LEFT JOIN product_object po ON d.objectId = po.objectId
+        LEFT JOIN sys_company sc ON d.companyId = sc.companyId
+        LEFT JOIN sys_user su ON d.detectUserId = su.userId
+        LEFT JOIN detect_item di ON d.itemId = di.itemId
+        LEFT JOIN detect_reagent dr ON d.reagentId = dr.reagentId
+        LEFT JOIN product_type pt ON d.productTypeId = pt.productTypeId
+        LEFT JOIN detect_source ds ON d.sourceId = ds.sourceId
+        <choose>
+            <when test="reviewFlag == '1'">
+                LEFT JOIN detect_review dd ON d.detectId = dd.detectId
+                LEFT JOIN detect_result dre ON dd.reviewResultId = dre.resultId
+            </when>
+            <otherwise>
+                LEFT JOIN detect_result dre ON d.resultId = dre.resultId
+            </otherwise>
+        </choose>
+
+        WHERE d.sampleId = #{sampleId}
+        <if test="itemId!=null and itemId!='' ">
+            AND d.itemId = #{itemId}
+        </if>
+        <if test="resultId!=null and resultId!='' ">
+            AND d.resultId = #{resultId}
+        </if>
+        ORDER BY createDate
+        LIMIT #{startNo},#{pageSize}
+    </select>
+
+    <select id="queryDetectReportById" resultType="HashMap">
+        SELECT
+        d.detectId,
+        sc.companyName,
+        po.objectName,
+        d.sampleId,
+        di.itemName,
+        dr.reagentName,
+        pt.typeName AS productTypeName,
+        ds.sourceName,
+        dre.resultName,
+        su.userName AS cUserName,
+        d.reviewFlag,
+        d.detectDate
+        <if test="reviewFlag == '1'">
+            ,d2.reviewDate,d2.reviewUserId,d2.reviewPicture,d2.reviewReagentId
+        </if>
+        FROM detect_report d
+        LEFT JOIN product_object po ON d.objectId = po.objectId
+        LEFT JOIN sys_company sc ON d.companyId = sc.companyId
+        LEFT JOIN sys_user su ON d.detectUserId = su.userId
+        LEFT JOIN detect_item di ON d.itemId = di.itemId
+        LEFT JOIN detect_reagent dr ON d.reagentId = dr.reagentId
+        LEFT JOIN product_type pt ON d.productTypeId = pt.typeId
+        LEFT JOIN detect_source ds ON d.sourceId = ds.sourceId
+        <choose>
+            <when test="reviewFlag == '1'">
+                LEFT JOIN detect_review d2 ON d.detectId = d2.detectId
+                LEFT JOIN detect_result dre ON d2.reviewResultId = dre.resultId
+            </when>
+            <otherwise>
+                LEFT JOIN detect_result dre ON d.resultId = dre.resultId
+            </otherwise>
+        </choose>
+        WHERE d.detectId = #{detectId}
+    </select>
+</mapper>

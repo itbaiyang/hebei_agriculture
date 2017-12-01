@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zrodo.agriculture.repository.CompanyMapper">
+    <insert id="addCompany">
+        INSERT INTO sys_company(companyNo,companyName,areaId,credit,contact,contactNumber,address,summary,longitude,
+                                latitude,auditing,webSite,companyType,createDate,productType)
+        VALUE (#{companyNo},#{companyName},#{areaId},#{credit},#{contact},#{contactNumber},#{address},#{summary},#{longitude},
+                       #{latitude},#{auditing},#{webSite},#{companyType},#{createDate},#{productType})
+    </insert>
+
+    <delete id="deleteCompany">
+        DELETE FROM sys_company WHERE companyId = #{companyId}
+    </delete>
+
+    <update id="updateCompany">
+        UPDATE sys_company
+        SET companyNo = #{companyNo},
+            companyName = #{companyName},
+            credit = #{credit},
+            address = #{address},
+            contact = #{contact},
+            contactNumber = #{contactNumber},
+            summary = #{summary},
+            longitude = #{longitude},
+            latitude = #{latitude},
+            webSite = #{webSite},
+            productType = #{productType}
+        WHERE companyId = #{companyId}
+    </update>
+
+    <select id="queryCompanyList" resultType="java.util.HashMap" statementType="CALLABLE">
+        SELECT
+        companyId,
+        companyNo,
+        companyName,
+        companyType,
+        sc.areaId,
+        sa.areaName,
+        credit,
+        contact,
+        contactNumber,
+        address,
+        summary,
+        longitude,
+        latitude,
+        auditing,
+        webSite,
+        sc.createDate,
+        productType
+        FROM sys_company sc
+        LEFT JOIN sys_area sa ON sc.areaId = sa.areaId
+        <where>
+            <if test="areaId!= null and areaId!= '' ">
+                sc.areaId = #{areaId}
+            </if>
+            <if test="pId!=null and pId!='' ">
+                AND deptId = #{deptId}
+            </if>
+        </where>
+        LIMIT #{startNo},#{pageSize}
+    </select>
+
+    <select id="queryCompanyListByDept" resultType="java.util.HashMap" statementType="CALLABLE">
+        SELECT
+        companyId,
+        companyNo,
+        companyName,
+        companyType,
+        sc.areaId,
+        sa.areaName,
+        credit,
+        contact,
+        contactNumber,
+        address,
+        summary,
+        longitude,
+        latitude,
+        auditing,
+        webSite,
+        sc.createDate,
+        productType
+        FROM sys_company sc
+        LEFT JOIN sys_area sa ON sc.areaId = sa.areaId
+        WHERE sa.areaId = #{areaId}
+        AND #{productType} &amp; sc.productType &gt; 0
+    </select>
+    <select id="queryCompanyById" resultType="java.util.HashMap" statementType="CALLABLE">
+        SELECT
+            companyId,
+            companyNo,
+            companyName,
+            companyType,
+            sc.areaId,
+            sa.areaName,
+            credit,
+            contact,
+            contactNumber,
+            address,
+            summary,
+            longitude,
+            latitude,
+            auditing,
+            webSite,
+            sc.createDate,
+            productType
+        FROM sys_company sc
+            LEFT JOIN sys_area sa ON sc.areaId = sa.areaId
+        WHERE companyId = #{companyId}
+    </select>
+</mapper>

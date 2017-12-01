@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zrodo.agriculture.repository.ProductiveProcessMapper">
+
+    <insert id="addProductiveProcess">
+        INSERT INTO productive_process(productId,cUserId,createDate,realprocess,location,latitude,longitude,
+                                       temper,weather,glsqId,theme)
+        VALUE (#{productId},#{cUserId},#{createDate},#{realprocess},#{location},#{latitude},#{longitude},
+                            #{temper},#{weather},#{glsqId},#{theme})
+    </insert>
+
+    <delete id="deleteProductiveProcess">
+        DELETE FROM productive_process WHERE processId = #{processId}
+    </delete>
+
+    <update id="updateProductiveProcess">
+        UPDATE productive_process
+        SET realprocess = #{realprocess},
+            temper = #{temper},
+            weather = #{weather},
+            theme = #{subject}
+        WHERE processId = #{processId}
+    </update>
+
+    <select id="queryProductiveProcessList" resultType="HashMap">
+        SELECT
+        pp.processId,
+        pp.glsqId,
+        psg.glsqName,
+        psg.subject,
+        psg.requirement,
+        pp.theme,
+        pp.realprocess,
+        pp.temper,
+        pp.weather,
+        pp.location,
+        pp.createDate
+        FROM productive_process pp
+        LEFT JOIN productive_standard_glsq psg ON pp.glsqId = psg.glsqId
+        WHERE productId = #{productId}
+    </select>
+
+    <select id="queryProductiveProcessById" resultType="HashMap">
+        SELECT
+            pp.processId,
+            pp.glsqId,
+            psg.glsqName,
+            psg.subject,
+            psg.requirement,
+            pp.theme,
+            pp.realprocess,
+            pp.temper,
+            pp.weather,
+            pp.location,
+            pp.createDate
+        FROM productive_process pp
+            LEFT JOIN productive_standard_glsq psg ON pp.glsqId = psg.glsqId
+        WHERE pp.processId = #{processId}
+    </select>
+
+    <insert id="addProductiveProcessAccessory">
+        INSERT INTO productive_process_accessory(processId,createDate,imgUrl)
+        VALUE (#{processId},#{createDate},#{imgUrl})
+    </insert>
+
+    <delete id="deleteProductiveProcessAccessory">
+        DELETE FROM productive_process_accessory WHERE accessoryId = #{accessoryId}
+    </delete>
+
+    <update id="updateProductiveProcessAccessory">
+        UPDATE productive_process_accessory
+        SET imgUrl = #{imgUrl}
+        WHERE accessoryId = #{accessoryId}
+    </update>
+</mapper>
