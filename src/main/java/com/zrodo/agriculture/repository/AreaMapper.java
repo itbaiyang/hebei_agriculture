@@ -19,6 +19,7 @@ public interface AreaMapper {
     public int updateArea(SysArea sysArea);
 
     public List<Map<String,Object>> queryAreaList(@Param("pId") Integer pId,
+                                                  @Param("areaNo") Integer areaNo,
                                                   @Param("startNo") Integer startNo,
                                                   @Param("pageSize") Integer pageSize);
 

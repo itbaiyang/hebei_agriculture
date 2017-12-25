@@ -43,15 +43,14 @@
         LEFT JOIN sys_dept_level sdl ON sd.levelId = sdl.levelId
         LEFT JOIN sys_area sa ON sd.areaId = sa.areaId
         <where>
-            <if test="areaId!= null and areaId!= '' ">
+            <if test="areaId != null and areaId != 0">
                 sd.areaId = #{areaId}
             </if>
-            <if test="pId!=null and pId!='' ">
+            <if test="pId != null and pId != 0">
                 AND sd.pId = #{pId}
             </if>
         </where>
-        ORDER BY level
-        LIMIT #{startNo},#{pageSize}
+        ORDER BY sd.levelId
     </select>
 
     <select id="queryDeptById" resultType="java.util.HashMap" statementType="CALLABLE">

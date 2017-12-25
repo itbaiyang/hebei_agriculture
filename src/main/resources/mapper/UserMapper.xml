@@ -27,7 +27,7 @@
             su.createDate,
             phoneNumber
         FROM sys_user su
-            LEFT JOIN sys_dept sd ON su
+            LEFT JOIN sys_dept sd ON su.deptId = sd.deptId
         WHERE deptId = #{deptId}
         ORDER BY createDate
         LIMIT #{startNo},#{pageSize}

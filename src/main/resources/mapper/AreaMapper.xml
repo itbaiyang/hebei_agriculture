@@ -21,15 +21,18 @@
       WHERE areaId = #{areaId}
     </update>
 
-    <select id="queryAreaList">
+    <select id="queryAreaList" resultType="java.util.HashMap" statementType="CALLABLE">
         SELECT *
         FROM sys_area
         <where>
             <if test="pId!=null and pId!='' ">
                 pId = #{pId}
             </if>
+            <if test="areaNo!=null and areaNo!='' ">
+               AND areaNo like '${areaNo}%'
+            </if>
         </where>
-        ORDER BY level, orderId DESC
+        ORDER BY levelId, orderId DESC
         LIMIT #{startNo},#{pageSize}
     </select>
 

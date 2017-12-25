@@ -22,17 +22,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers( "/css/**","/webjars/**","/image/**","/areaManage").permitAll()
-//                .antMatchers("/setting").authenticated()
-                .antMatchers("/setting").hasAnyRole("MEMBER","SUPER_ADMIN")
-                .anyRequest().authenticated()
-                .and()
+                .antMatchers( "/**").permitAll();
+//                .antMatchers( "/css/**","/webjars/**","/image/**","/areaManage","/login").permitAll()
+//                .antMatchers("/setting").hasAnyRole("MEMBER","SUPER_ADMIN")
+//                .anyRequest().authenticated()
+//                .and()
 //                .formLogin()
 //                .loginPage("/login")
 //                .permitAll()
 //                .and()
-                .logout()
-                .permitAll();
+//                .logout()
+//                .permitAll();
         http
                 .csrf().disable();
     }

@@ -16,23 +16,23 @@ import javax.sql.DataSource;
 /**
  * Created by admin on 2017/10/31.
  */
-@Configuration
-@MapperScan(basePackages = "com.zrodo.agriculture.repository",sqlSessionFactoryRef = "priSqlSessionFactory")
-public class DataSourceConfig {
-
-    @Bean(name = "priDataSource")
-    @Primary
-    @ConfigurationProperties("spring.datasource.primary")
-    public DataSource primaryDataSource(){
-        return DruidDataSourceBuilder.create().build();
-    }
-
-    @Bean(name = "priSqlSessionFactory")
-    @Primary
-    public SqlSessionFactory primarySqlSessionFactory(@Qualifier("priDataSource") DataSource dataSource) throws Exception {
-        SqlSessionFactoryBean bean = new SqlSessionFactoryBean ();
-        bean.setDataSource(dataSource);
-        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/*.xml"));
-        return bean.getObject();
-    }
-}
+//@Configuration
+//@MapperScan(basePackages = "com.zrodo.agriculture.repository",sqlSessionFactoryRef = "sqlSessionFactory")
+//public class DataSourceConfig {
+//
+//    @Bean(name = "dataSource")
+//    @Primary
+//    @ConfigurationProperties("spring.datasource")
+//    public DataSource primaryDataSource(){
+//        return DruidDataSourceBuilder.create().build();
+//    }
+//
+//    @Bean(name = "sqlSessionFactory")
+//    @Primary
+//    public SqlSessionFactory primarySqlSessionFactory(@Qualifier("dataSource") DataSource dataSource) throws Exception {
+//        SqlSessionFactoryBean bean = new SqlSessionFactoryBean ();
+//        bean.setDataSource(dataSource);
+//        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/*.xml"));
+//        return bean.getObject();
+//    }
+//}

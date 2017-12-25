@@ -2,23 +2,15 @@ spring:
   profiles:
     active: dev
   datasource:
-    primary:
       driver-class-name: com.mysql.jdbc.Driver
       url: jdbc:mysql://zrodo2015.mysql.rds.aliyuncs.com:3306/hebeizonghe?useUnicode=true&amp;characterEncoding=utf-8
       username: hebeizonghe
       password: HeBeiZH
-#    second:
-#      driver-class-name: com.mysql.jdbc.Driver
-#      url: jdbc:mysql://zrodo2015.mysql.rds.aliyuncs.com:3306/hebeizonghe?useUnicode=true&amp;characterEncoding=utf-8
-#      username: hebeizonghe
-#      password: HeBeiZH
-    druid:
-      initial-size: 5
-      min-idle: 5
-      max-active: 20
-      # 配置获取连接等待超时的时间
-      max-wait: 60000
-
+      druid:
+        initial-size: 5
+        min-idle: 5
+        max-active: 20
+        max-wait: 60000
   #文件上传大小限制
   http:
       multipart:
@@ -43,3 +35,6 @@ logging:
 token:
   expire:
     time: 60
+mybatis:
+  config-location: classpath:mybatis-config.xml
+  mapper-locations: classpath:mapper/*.xml
