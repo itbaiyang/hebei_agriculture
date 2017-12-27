@@ -17,7 +17,14 @@ public interface DeptMapper {
     public int updateDept(SysDept sysDept);
 
     public List<Map<String,Object>> queryDeptList(@Param("areaId") Integer areaId,
-                                                  @Param("pId") Integer pId);
+                                                  @Param("pId") Integer pId,
+                                                  @Param("levelId") Integer levelId);
 
     public Map<String,Object>queryDeptById(Integer deptId);
+
+    public String getMaxUnderDeptNo(@Param("pId")Integer pId);
+
+    public String getDeptNoById(@Param("deptId")Integer deptId);
+
+    public List<Map<String,Object>> queryLevelList();
 }

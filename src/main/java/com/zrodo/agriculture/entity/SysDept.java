@@ -27,6 +27,8 @@ public class SysDept {
 
     private String principalNumber;
 
+    private Integer[] productList;
+
     public Integer getDeptId() {
         return deptId;
     }
@@ -121,5 +123,13 @@ public class SysDept {
 
     public void setPrincipalNumber(String principalNumber) {
         this.principalNumber = principalNumber;
+    }
+
+    public Integer[] getProductList() {
+        return productList;
+    }
+
+    public void setProductList(Integer[] productList) {
+        this.productList = productList;
     }
 }
