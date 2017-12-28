@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
+
 @Repository
 public interface ProductMapper {
 
@@ -22,7 +23,7 @@ public interface ProductMapper {
                                                      @Param("startNo") Integer startNo,
                                                      @Param("pageSize") Integer pageSize);
 
-    public Map<String,Object> queryProductById(Integer id);
+    public Map<String, Object> queryProductById(Integer id);
 
-    public List<Map<String,Object>> queryProductType();
+    public List<Map<String, Object>> queryProductType();
 }

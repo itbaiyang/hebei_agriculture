@@ -27,18 +27,14 @@ public class ProductController {
 
     @GetMapping(value = "/productType")
     @ApiOperation(value = "产品类型列表", notes = "产品类型列表")
-    public String queryProductType()
-    {
+    public String queryProductType() {
         String json;
-        try
-        {
-            List<Map<String,Object>> result = productMapper.queryProductType();
+        try {
+            List<Map<String, Object>> result = productMapper.queryProductType();
             Map<String, Object> map = JsonMapUtils.buildSuccessMap();
             map.put("result", result);
             json = Tool.getJsonFromObect(map);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             json = JsonStatus.failure();
         }
         return json;

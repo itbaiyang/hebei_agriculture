@@ -34,11 +34,9 @@ public class DeptController {
         {
             String maxUnderDeptId = deptMapper.getMaxUnderDeptNo(sysDept.getpId());
             String addDeptId = null;
-            if(StringUtils.isBlank(maxUnderDeptId))
-            {
+            if (StringUtils.isBlank(maxUnderDeptId)) {
                 addDeptId = deptMapper.getDeptNoById(sysDept.getpId()) + "01";
-            } else
-            {
+            } else {
                 addDeptId = String.valueOf((Integer.valueOf(maxUnderDeptId) + 1));
             }
             sysDept.setDeptNo(addDeptId);
@@ -92,20 +90,19 @@ public class DeptController {
     @GetMapping(value = "/deptList")
     @ApiOperation(value = "查询部门列表", notes = "查询部门列表")
     public String queryDeptList(HttpServletRequest request,
-                             @ApiParam(name = "areaId", value = "区划Id")
-                             @ApiParam(required = false, name = "areaId", value = "区划Id")
+                                @ApiParam(name = "areaId", value = "区划Id")
                                 @RequestParam(value="areaId",required=false) Integer areaId,
-                             @ApiParam(name = "pId", value = "上级Id")
+                                @ApiParam(name = "pId", value = "上级Id")
                                 @RequestParam(value="pId",required=false) Integer pId,
-                            @ApiParam(name = "deptNo", value = "部门编号")
-                                @RequestParam(value="deptNo",required=false) Integer deptNo,
-                            @ApiParam(required = false, name = "levelId", value = "部门级别Id")
-                                @RequestParam(value="levelId",required=false) Integer levelId
-) {
+                                @ApiParam(name = "deptNo", value = "部门编号")
+                                @RequestParam(value = "deptNo", required = false) Integer deptNo,
+                                @ApiParam(required = false, name = "levelId", value = "部门级别Id")
+                                @RequestParam(value = "levelId", required = false) Integer levelId
+    ) {
         String json;
         try
         {
-            List<Map<String,Object>> result = deptMapper.queryDeptList(areaId,pId,deptNo);
+            List<Map<String, Object>> result = deptMapper.queryDeptList(areaId, pId, deptNo, levelId);
             Map<String, Object> map = JsonMapUtils.buildSuccessMap();
             map.put("result", result);
             json = Tool.getJsonFromObect(map);
@@ -142,15 +139,12 @@ public class DeptController {
     @ApiOperation(value = "级别列表", notes = "级别列表")
     public String queryLevelList() {
         String json;
-        try
-        {
-            List<Map<String,Object>> result = deptMapper.queryLevelList();
+        try {
+            List<Map<String, Object>> result = deptMapper.queryLevelList();
             Map<String, Object> map = JsonMapUtils.buildSuccessMap();
             map.put("result", result);
             json = Tool.getJsonFromObect(map);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             json = JsonStatus.failure();
         }
         return json;

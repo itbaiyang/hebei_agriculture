@@ -81,19 +81,15 @@ public class AreaController {
     @GetMapping(value = "/areaList")
     @ApiOperation(value = "区划列表", notes = "从city表复制（后台专用）")
     public String areaListByLevel(
-                       @ApiParam(name = "levelId", value = "级别Id")
-                       @RequestParam(required = true)Integer levelId)
-    {
+            @ApiParam(name = "levelId", value = "级别Id")
+            @RequestParam(required = true) Integer levelId) {
         String json;
-        try
-        {
-            List<Map<String,Object>> result = areaMapper.queryAreaListByLevel(levelId);
+        try {
+            List<Map<String, Object>> result = areaMapper.queryAreaListByLevel(levelId);
             Map<String, Object> map = JsonMapUtils.buildSuccessMap();
             map.put("result", result);
             json = Tool.getJsonFromObect(map);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             json = JsonStatus.failure();
         }
         return json;

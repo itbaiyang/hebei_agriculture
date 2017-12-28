@@ -60,9 +60,9 @@
             <if test="deptNo != null and deptNo != 0">
                 AND sd.deptNo like '${deptNo}%'
             </if>
-            <if test="levelId != null and levelId != 0">
-                AND sd.levelId = #{levelId}
-            </if>
+        <if test="levelId != null and levelId != 0">
+            AND sd.levelId = #{levelId}
+        </if>
         ORDER BY sd.levelId
     </select>
 
@@ -94,14 +94,22 @@
 
 
     <select id="getMaxUnderDeptNo" resultType="java.lang.String">
-        SELECT MAX(sd.deptNo) FROM sys_dept sd WHERE sd.pId = #{pId}
+        SELECT MAX(sd.deptNo)
+        FROM sys_dept sd
+        WHERE sd.pId = #{pId}
     </select>
 
     <select id="getDeptNoById" resultType="java.lang.String">
-        SELECT MAX(sd.deptNo) FROM sys_dept sd WHERE sd.deptId = #{deptId}
+        SELECT MAX(sd.deptNo)
+        FROM sys_dept sd
+        WHERE sd.deptId = #{deptId}
     </select>
 
     <select id="queryLevelList" resultType="java.util.HashMap" statementType="CALLABLE">
-        SELECT levelId, levelName FROM sys_dept_level WHERE openFlag = 1
+        SELECT
+        levelId,
+        levelName
+        FROM sys_dept_level
+        WHERE openFlag = 1
     </select>
 </mapper>

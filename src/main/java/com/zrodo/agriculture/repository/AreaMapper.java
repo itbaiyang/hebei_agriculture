@@ -23,7 +23,7 @@ public interface AreaMapper {
                                                   @Param("startNo") Integer startNo,
                                                   @Param("pageSize") Integer pageSize);
 
-    public List<Map<String,Object>> queryAreaListByLevel(@Param("levelId")Integer levelId);
+    public List<Map<String, Object>> queryAreaListByLevel(@Param("levelId") Integer levelId);
 
     public Map<String,Object> queryAreaById(Integer areaId);
 
