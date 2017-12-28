@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 
 @Service(value = "areaService")
 public class AreaService {
@@ -33,6 +32,5 @@ public class AreaService {
     @Transactional
     public void deleteAreaById(int areaNo){
         areaMapper.deleteAreaList(areaNo);
-        System.out.println(123);
     }
 }

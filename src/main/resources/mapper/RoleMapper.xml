@@ -3,8 +3,8 @@
 <mapper namespace="com.zrodo.agriculture.repository.RoleMapper">
 
     <insert id="addRole">
-        INSERT INTO sys_role(roleName,expl,level,createDate,type)
-        VALUE (#{roleName},#{explain},#{level},#{createDate},#{type})
+        INSERT INTO sys_role(roleName, type, expl, levelId, createDate)
+        VALUE (#{roleName}, #{type}, #{expl}, #{levelId}, #{createDate})
     </insert>
 
     <delete id="deleteRole">
@@ -14,7 +14,7 @@
     <update id="updateRole">
         UPDATE sys_role SET
             roleName = #{roleName},
-            expl = #{explain}
+            expl = #{expl}
         WHERE roleId = #{roleId}
     </update>
 
@@ -25,10 +25,16 @@
         LIMIT #{startNo},#{pageSize}
     </select>
 
-    <select id="queryRoleListByLevel">
-        SELECT * FROM sys_user
-        WHERE deptId = #{deptId}
-        ORDER BY createDate
+    <select id="queryRoleListByLevel" resultType="java.util.HashMap" statementType="CALLABLE">
+        SELECT roleId,roleName,sys_role.levelId,levelName,expl,sys_role.createDate,
+              type, CASE type WHEN 1 THEN '政府部门' WHEN 2 THEN '企业' END AS typeName
+        FROM sys_role
+        LEFT JOIN sys_dept_level ON sys_role.levelId = sys_dept_level.levelId
+        WHERE type = #{type}
+        <if test="levelId != null and levelId != 0">
+            AND sys_role.levelId = #{levelId}
+        </if>
+        ORDER BY sys_role.type desc, sys_role.levelId, sys_role.createDate
         LIMIT #{startNo},#{pageSize}
     </select>
 

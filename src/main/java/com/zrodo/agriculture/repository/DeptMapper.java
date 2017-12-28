@@ -10,14 +10,16 @@ import java.util.Map;
 @Repository
 public interface DeptMapper {
 
-    public int addDept(SysDept sysDept);
+    void addDept(SysDept sysDept);
 
-    public int deleteDept(Integer deptId);
+    void deleteDept(Integer deptId);
 
-    public int updateDept(SysDept sysDept);
+    void hiddenDept(Integer deptId, Boolean flag);
 
-    public List<Map<String,Object>> queryDeptList(@Param("areaId") Integer areaId,
-                                                  @Param("pId") Integer pId);
+    void updateDept(SysDept sysDept);
 
-    public Map<String,Object>queryDeptById(Integer deptId);
+    List<Map<String,Object>> queryDeptList(@Param("areaId") Integer areaId,
+                                           @Param("pId") Integer pId,
+                                           @Param("deptNo") Integer deptNo);
+    Map<String,Object> queryDeptById(Integer deptId);
 }

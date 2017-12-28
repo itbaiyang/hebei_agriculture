@@ -8,7 +8,7 @@ public class SysRole {
 
     private String roleName;
 
-    private String explain;
+    private String expl;
 
     private int level;
 
@@ -30,12 +30,12 @@ public class SysRole {
         this.roleName = roleName;
     }
 
-    public String getExplain() {
-        return explain;
+    public String getExpl() {
+        return expl;
     }
 
-    public void setExplain(String explain) {
-        this.explain = explain;
+    public void setExpl(String expl) {
+        this.expl = expl;
     }
 
     public int getLevel() {

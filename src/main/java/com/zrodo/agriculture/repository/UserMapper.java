@@ -21,6 +21,13 @@ public interface UserMapper {
                                                   @Param("startNo") Integer startNo,
                                                   @Param("pageSize") Integer pageSize);
 
+    public List<Map<String,Object>> queryUserListByDept(@Param("deptId") Integer deptId,
+                                                        @Param("startNo") Integer startNo,
+                                                        @Param("pageSize") Integer pageSize);
+
+    public List<Map<String,Object>> queryUserListByCompany(@Param("companyId") Integer companyId,
+                                                            @Param("startNo") Integer startNo,
+                                                            @Param("pageSize") Integer pageSize);
     public Map<String,Object>queryUserById(Integer userId);
 
     public AccountInfo queryUserByAccount(String account);

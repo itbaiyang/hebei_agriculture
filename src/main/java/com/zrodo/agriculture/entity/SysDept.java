@@ -1,30 +1,35 @@
 package com.zrodo.agriculture.entity;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
 public class SysDept {
+    @ApiModelProperty(name = "deptId",value = "部门自增id（修改删除）")
     private Integer deptId;
-
+    @ApiModelProperty(name = "deptNo",value = "部门编号（不用）", hidden = true)
     private String deptNo;
-
+    @ApiModelProperty(name = "deptName",value = "部门名称", required = true)
     private String deptName;
-
+    @ApiModelProperty(name = "areaId",value = "区划Id", required = true)
     private Integer areaId;
-
+    @ApiModelProperty(name = "pId",value = "上级部门Id", required = true)
     private Integer pId;
-
+    @ApiModelProperty(name = "level",value = "部门级别", required = true)
     private Integer level;
-
+    @ApiModelProperty(name = "address",value = "部门地址", required = true)
     private String address;
-
+    @ApiModelProperty(name = "contact",value = "部门联系人", required = true)
     private String contact;
-
+    @ApiModelProperty(name = "ContactNumber",value = "部门联系人电话", required = true)
     private String ContactNumber;
-
+    @ApiModelProperty(name = "createDate",value = "创建时间", hidden = true)
     private Date createDate;
-
+    @ApiModelProperty(name = "updateDate",value = "修改时间", hidden = true)
+    private Date updateDate;
+    @ApiModelProperty(name = "principal",value = "部门名称（不用）", hidden = true)
     private String principal;
-
+    @ApiModelProperty(name = "principalNumber",value = "部门名称（不用）", hidden = true)
     private String principalNumber;
 
     public Integer getDeptId() {
@@ -105,6 +110,14 @@ public class SysDept {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 
     public String getPrincipal() {

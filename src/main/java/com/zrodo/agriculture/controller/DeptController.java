@@ -61,7 +61,8 @@ public class DeptController {
     @DeleteMapping(value = "/dept")
     @ApiOperation(value = "删除部门", notes = "删除部门")
     public String deleteDept(HttpServletRequest request,
-                             @ApiParam(required = true, name = "deptId", value = "城市编号") @RequestParam int deptId)
+                             @ApiParam(required = true, name = "deptId", value = "城市编号")
+                             @RequestParam int deptId)
     {
         String json;
         try
@@ -76,18 +77,21 @@ public class DeptController {
         return json;
     }
 
+    /*通过上级部门查询，通过区划Id查询*/
     @GetMapping(value = "/deptList")
-    @ApiOperation(value = "删除部门", notes = "删除部门")
+    @ApiOperation(value = "查询部门列表", notes = "查询部门列表")
     public String queryDeptList(HttpServletRequest request,
-                             @ApiParam(required = false, name = "areaId", value = "城市编号")
+                             @ApiParam(name = "areaId", value = "区划Id")
                                 @RequestParam(value="areaId",required=false) Integer areaId,
-                             @ApiParam(required = false, name = "pId", value = "页码")
-                                @RequestParam(value="pId",required=false) Integer pId
+                             @ApiParam(name = "pId", value = "上级Id")
+                                @RequestParam(value="pId",required=false) Integer pId,
+                            @ApiParam(name = "pId", value = "上级Id")
+                                @RequestParam(value="deptNo",required=false) Integer deptNo
     ) {
         String json;
         try
         {
-            List<Map<String,Object>> result = deptMapper.queryDeptList(areaId,pId);
+            List<Map<String,Object>> result = deptMapper.queryDeptList(areaId,pId,deptNo);
             Map<String, Object> map = JsonMapUtils.buildSuccessMap();
             map.put("result", result);
             json = Tool.getJsonFromObect(map);
@@ -103,13 +107,15 @@ public class DeptController {
     @ApiOperation(value = "删除部门", notes = "删除部门")
     public String queryDeptById(HttpServletRequest request,
                                 @ApiParam(required = true, name = "deptId", value = "城市编号")
-                                @RequestParam(value="deptId",required=true) int deptId
+                                @RequestParam(value="deptId") int deptId
     ) {
         String json;
         try
         {
-            deptMapper.queryDeptById(deptId);
-            json = JsonStatus.success();
+            Map<String, Object> result = deptMapper.queryDeptById(deptId);
+            Map<String, Object> map = JsonMapUtils.buildSuccessMap();
+            map.put("result", result);
+            json = Tool.getJsonFromObect(map);
         }
         catch(Exception e)
         {
