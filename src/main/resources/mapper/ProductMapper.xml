@@ -63,4 +63,8 @@
             LEFT JOIN sys_user su ON p.cUserId = su.userId
         WHERE p.id = #{id}
     </select>
+    <select id="queryProductType" resultType="HashMap">
+        SELECT id, typeName
+        FROM product_type
+    </select>
 </mapper>

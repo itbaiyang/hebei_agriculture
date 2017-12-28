@@ -36,6 +36,13 @@
         LIMIT #{startNo},#{pageSize}
     </select>
 
+    <select id="queryAreaListByLevel" resultType="java.util.HashMap" statementType="CALLABLE">
+        SELECT areaId,areaName
+        FROM sys_area
+        WHERE levelId = #{levelId}
+    </select>
+
+
     <select id="queryAreaById">
         SELECT *
         FROM sys_area

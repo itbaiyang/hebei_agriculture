@@ -17,9 +17,19 @@ public interface DeptMapper {
     void hiddenDept(Integer deptId, Boolean flag);
 
     void updateDept(SysDept sysDept);
+    public List<Map<String,Object>> queryDeptList(@Param("areaId") Integer areaId,
+                                                  @Param("pId") Integer pId,
+                                                  @Param("levelId") Integer levelId);
 
     List<Map<String,Object>> queryDeptList(@Param("areaId") Integer areaId,
                                            @Param("pId") Integer pId,
                                            @Param("deptNo") Integer deptNo);
     Map<String,Object> queryDeptById(Integer deptId);
+    public Map<String,Object>queryDeptById(Integer deptId);
+
+    public String getMaxUnderDeptNo(@Param("pId")Integer pId);
+
+    public String getDeptNoById(@Param("deptId")Integer deptId);
+
+    public List<Map<String,Object>> queryLevelList();
 }
