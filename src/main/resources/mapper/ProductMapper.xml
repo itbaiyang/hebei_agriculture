@@ -3,9 +3,9 @@
 <mapper namespace="com.zrodo.agriculture.repository.ProductMapper">
 
     <insert id="addProduct">
-        INSERT INTO product(productNo,objectId,productTypeId,cUserId,createDate,companyId,description,dutyTypeId,
+        INSERT INTO product(productNo,objectId,productType,cUserId,createDate,companyId,description,dutyTypeId,
         processNo,standardId,owner,pieceId)
-        VALUE (#{productNo},#{objectId},#{productTypeId},#{cUserId},#{createDate},#{companyId},#{description},
+        VALUE (#{productNo},#{objectId},#{productTypeId},#{cUserId},NOW(),#{companyId},#{description},
         #{dutyTypeId},#{processNo},#{standardId},#{owner},#{pieceId})
     </insert>
 
@@ -31,20 +31,17 @@
         ps.name AS standardName, sc.companyName,su.userName,p.createDate,p.owner,sc.areaId
         FROM product p
         LEFT JOIN product_object po ON p.objectId = po.objectId
-        LEFT JOIN product_type pt ON p.productTypeId = pt.typeId
+        LEFT JOIN product_type pt ON p.productType = pt.typeId
         LEFT JOIN product_duty_type pdt ON p.dutyTypeId = pdt.typeId
         LEFT JOIN productive_standard ps ON p.standardId = ps.standardId
         LEFT JOIN sys_company sc ON p.companyId = sc.companyId
         LEFT JOIN sys_user su ON p.cUserId = su.userId
         <where>
             <if test="companyId!= null and companyId!= '' ">
-                companyId = #{companyId}
+                p.companyId = #{companyId}
             </if>
-            <if test="areaId!= null and areaId!= '' ">
-                sc.areaId = #{areaId}
-            </if>
-            <if test="productTypeId!=null and productTypeId!='' ">
-                AND productTypeId = #{productTypeId}
+            <if test="productType!=null and productType!='' ">
+                AND p.productType = #{productType}
             </if>
         </where>
         ORDER BY createDate
