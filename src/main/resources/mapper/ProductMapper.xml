@@ -53,7 +53,7 @@
                                   ps.name AS standardName, sc.companyName,su.userName,p.createDate,p.owner,sc.areaId
         FROM product p
             LEFT JOIN product_object po ON p.objectId = po.objectId
-            LEFT JOIN product_type pt ON p.productTypeId = pt.typeId
+        LEFT JOIN product_type pt ON p.productType = pt.typeId
             LEFT JOIN product_duty_type pdt ON p.dutyTypeId = pdt.typeId
             LEFT JOIN productive_standard ps ON p.standardId = ps.standardId
             LEFT JOIN sys_company sc ON p.companyId = sc.companyId

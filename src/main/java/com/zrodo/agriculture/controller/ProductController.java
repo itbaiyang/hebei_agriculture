@@ -1,6 +1,5 @@
 package com.zrodo.agriculture.controller;
 
-import com.zrodo.agriculture.entity.Product;
 import com.zrodo.agriculture.repository.ProductMapper;
 import com.zrodo.agriculture.util.Tool;
 import com.zrodo.agriculture.util.json.JsonMapUtils;
@@ -33,9 +32,9 @@ public class ProductController {
                               @RequestParam(value = "companyId", required = false) Integer companyId,
                               @ApiParam(name = "productType", value = "产品类型")
                               @RequestParam(value = "productType", required = false) Integer productType,
-                              @ApiParam(required = false, name = "startDate", value = "起始时间")
+                              @ApiParam(name = "startDate", value = "起始时间")
                               @RequestParam(value = "startDate", required = false) String startDate,
-                              @ApiParam(required = false, name = "endDate", value = "结束时间")
+                              @ApiParam(name = "endDate", value = "结束时间")
                               @RequestParam(value = "endDate", required = false) String endDate,
                               @ApiParam(required = true, name = "pageNo", value = "页码")
                               @RequestParam(defaultValue = "1") Integer pageNo,
@@ -44,7 +43,7 @@ public class ProductController {
     ) {
         String json;
         try {
-            List<Map<String, Object>> result = null;
+            List<Map<String, Object>> result;
             result = productMapper.queryProductList(companyId, productType, startDate, endDate, (pageNo - 1) * pageSize, pageSize);
             Map<String, Object> map = JsonMapUtils.buildSuccessMap();
             map.put("result", result);

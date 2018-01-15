@@ -29,7 +29,7 @@ public class AreaService {
             areaMapper.insertArea(sysArea);
         }
     }
-    @Transactional
+
     public void deleteAreaById(int areaNo){
         areaMapper.deleteAreaList(areaNo);
     }

@@ -82,7 +82,7 @@ public class AreaController {
     @ApiOperation(value = "区划列表", notes = "从city表复制（后台专用）")
     public String areaListByLevel(
             @ApiParam(name = "levelId", value = "级别Id")
-            @RequestParam(required = true) Integer levelId) {
+            @RequestParam Integer levelId) {
         String json;
         try {
             List<Map<String, Object>> result = areaMapper.queryAreaListByLevel(levelId);
@@ -94,20 +94,4 @@ public class AreaController {
         }
         return json;
     }
-//    @GetMapping(value = "/area")
-//    @ApiOperation(value = "添加区划", notes = "从city表复制（后台专用）")
-//    public String insertArea(HttpServletRequest request,
-//                             @ModelAttribute SysArea sysAre)
-//    {
-//        String json;
-//        try
-//        {
-//            json = JsonStatus.success();
-//        }
-//        catch(Exception e)
-//        {
-//            json = JsonStatus.failure();
-//        }
-//        return json;
-//    }
 }

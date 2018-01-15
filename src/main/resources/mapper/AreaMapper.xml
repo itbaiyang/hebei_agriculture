@@ -9,9 +9,11 @@
     <delete id="deleteArea">
       DELETE FROM sys_area WHERE areaId = #{areaId}
     </delete>
+
     <delete id="deleteAreaList">
         DELETE FROM sys_area WHERE areaNo LIKE '${areaNo}%'
     </delete>
+
     <update id="updateArea">
       UPDATE sys_area
       SET areaNo = #{areaNo},

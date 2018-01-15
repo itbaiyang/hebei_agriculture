@@ -28,15 +28,15 @@
     <select id="queryReviewReportListBySample" resultType="HashMap">
         SELECT
         d.detectId,
-        sc.name AS companyName,
+        sc.companyName,
         po.objectName,
         d.sampleId,
         di.itemName,
         dr.reagentName,
-        pt.name AS productType,
+        pt.typeName AS productType,
         ds.sourceName,
         dre.resultName,
-        su.name AS cUserName,
+        su.userName AS cUserName,
         d.reviewFlag,
         d.detectDate
         FROM detect_report d
@@ -45,7 +45,7 @@
         LEFT JOIN sys_user su ON d.detectUserId = su.userId
         LEFT JOIN detect_item di ON d.itemId = di.itemId
         LEFT JOIN detect_reagent dr ON d.reagentId = dr.reagentId
-        LEFT JOIN product_type pt ON d.productTypeId = pt.productTypeId
+        LEFT JOIN product_type pt ON d.productType = pt.typeId
         LEFT JOIN detect_source ds ON d.sourceId = ds.sourceId
         <choose>
             <when test="reviewFlag == '1'">

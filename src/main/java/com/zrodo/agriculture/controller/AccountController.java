@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -33,10 +34,21 @@ public class AccountController {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
+    @Value("${application.message:Hello World}")
+    private String message = "Hello World";
+
+    @GetMapping(value = "/")
+    @ApiOperation(value = "入口", notes = "入口")
+    public String home(Map<String, Object> model) {
+        model.put("time", new Date());
+        model.put("message", this.message);
+        return "login3";
+    }
+
+
     @PostMapping(value = "/login")
     @ApiOperation(value = "登录", notes = "登录")
-    public String login(HttpServletRequest request,
-                        @ApiParam(required = true, name = "account", value = "用户名") @RequestParam String account,
+    public String login(@ApiParam(required = true, name = "account", value = "用户名") @RequestParam String account,
                         @ApiParam(required = true, name = "password", value = "密码") @RequestParam String password)
     {
         String json;
@@ -73,10 +85,21 @@ public class AccountController {
     }
 
     @ResponseBody
-    @GetMapping(value = "/logout")
-    @ApiOperation(value = "ff", notes = "ff")
-    public String hello()
+    @PostMapping(value = "/logout")
+    @ApiOperation(value = "退出", notes = "退出登录")
+    public String hello(HttpServletRequest request,
+                        @ApiParam(required = true, name = "token", value = "token") @RequestHeader String token)
     {
-        return "hello";
+        try {
+            String tokenValue = redisTemplate.boundValueOps(token).get();
+            if (tokenValue != null) {
+                redisTemplate.delete(token);
+                return JsonStatus.success();
+            } else {
+                return JsonStatus.tokenExpire();
+            }
+        } catch (Exception e) {
+            return JsonStatus.failure();
+        }
     }
 }

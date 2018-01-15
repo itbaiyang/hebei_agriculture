@@ -84,6 +84,7 @@
         WHERE sa.areaId = #{areaId}
         AND #{productType} &amp; sc.productType &gt; 0
     </select>
+
     <select id="queryCompanyById" resultType="java.util.HashMap" statementType="CALLABLE">
         SELECT
             companyId,
