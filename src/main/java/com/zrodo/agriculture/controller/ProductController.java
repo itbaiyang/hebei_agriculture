@@ -26,7 +26,7 @@ public class ProductController {
     private ProductMapper productMapper;
 
     @GetMapping(value = "/productList")
-    @ApiOperation(value = "查询用户列表", notes = "查询用户列表")
+    @ApiOperation(value = "查询产品列表", notes = "查询产品列表")
     public String productList(HttpServletRequest request,
                               @ApiParam(name = "companyId", value = "企业Id")
                               @RequestParam(value = "companyId", required = false) Integer companyId,

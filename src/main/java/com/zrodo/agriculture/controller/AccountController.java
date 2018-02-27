@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,31 +22,29 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Api(value = "账号", description = "登录，登出，密码修改")
-@RestController
+@Controller
 @Component
 public class AccountController {
 
     @Value("${token.expire.time}")
     private Long expireTime;
-
+    @Value("${application.hello:Hello Angel}")
+    private String hello;
     @Autowired
     private UserMapper userMapper;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
-    @Value("${application.message:Hello World}")
-    private String message = "Hello World";
 
-    @GetMapping(value = "/")
+    @RequestMapping(value = "/login3", method = {RequestMethod.GET})
     @ApiOperation(value = "入口", notes = "入口")
     public String home(Map<String, Object> model) {
-        model.put("time", new Date());
-        model.put("message", this.message);
+        model.put("hello", hello);
         return "login3";
     }
 
-
+    @ResponseBody
     @PostMapping(value = "/login")
     @ApiOperation(value = "登录", notes = "登录")
     public String login(@ApiParam(required = true, name = "account", value = "用户名") @RequestParam String account,

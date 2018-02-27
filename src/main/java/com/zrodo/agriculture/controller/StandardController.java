@@ -1,6 +1,5 @@
 package com.zrodo.agriculture.controller;
 
-import com.zrodo.agriculture.repository.ProductMapper;
 import com.zrodo.agriculture.repository.ProductiveStandardMapper;
 import com.zrodo.agriculture.util.Tool;
 import com.zrodo.agriculture.util.json.JsonMapUtils;

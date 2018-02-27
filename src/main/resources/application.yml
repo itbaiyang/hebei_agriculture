@@ -26,10 +26,6 @@ spring:
     pool:
       max-active: 20
       min-idle: 2
-  mvc:
-    view:
-      prefix: /WEB-INF/jsp/
-      suffix: .jsp
 logging:
   path: exam.log
   level:
@@ -42,3 +38,5 @@ token:
 mybatis:
   config-location: classpath:mybatis-config.xml
   mapper-locations: classpath:mapper/*.xml
+application:
+  hello: HelloAngel From Application
