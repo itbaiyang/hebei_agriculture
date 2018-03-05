@@ -30,7 +30,6 @@ logging:
   path: exam.log
   level:
     root: info
-
 ##自定义配置
 token:
   expire:

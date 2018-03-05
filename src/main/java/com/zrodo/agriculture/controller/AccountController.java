@@ -3,26 +3,26 @@ package com.zrodo.agriculture.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zrodo.agriculture.domain.AccountInfo;
 import com.zrodo.agriculture.repository.UserMapper;
+import com.zrodo.agriculture.util.Token;
 import com.zrodo.agriculture.util.Tool;
 import com.zrodo.agriculture.util.json.JsonMapUtils;
 import com.zrodo.agriculture.util.json.JsonStatus;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Api(value = "账号", description = "登录，登出，密码修改")
-@Controller
+@RestController
 @Component
 public class AccountController {
 
@@ -36,15 +36,6 @@ public class AccountController {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
-
-    @RequestMapping(value = "/login3", method = {RequestMethod.GET})
-    @ApiOperation(value = "入口", notes = "入口")
-    public String home(Map<String, Object> model) {
-        model.put("hello", hello);
-        return "login3";
-    }
-
-    @ResponseBody
     @PostMapping(value = "/login")
     @ApiOperation(value = "登录", notes = "登录")
     public String login(@ApiParam(required = true, name = "account", value = "用户名") @RequestParam String account,
@@ -53,8 +44,8 @@ public class AccountController {
         String json;
         try
         {
-//            account = Tool.getStrFromBase64(account);
-//            password = Tool.getStrFromBase64(password);
+            account = Tool.getStrFromBase64(account);
+            password = Tool.getStrFromBase64(password);
             AccountInfo accountInfo = userMapper.queryUserByAccount(account);
             if (accountInfo == null)
             {
@@ -83,7 +74,6 @@ public class AccountController {
         return json;
     }
 
-    @ResponseBody
     @PostMapping(value = "/logout")
     @ApiOperation(value = "退出", notes = "退出登录")
     public String hello(HttpServletRequest request,
@@ -100,5 +90,13 @@ public class AccountController {
         } catch (Exception e) {
             return JsonStatus.failure();
         }
+    }
+
+    @RequestMapping(value = "getUserInfoByToken", method = {RequestMethod.GET})
+    @ApiOperation(value = "根据token获取用户", notes = "")
+    public String getUserInfoByToken(HttpServletRequest request) {
+        AccountInfo accountInfo = Token.getUser(request);
+
+        return JSONObject.fromObject(accountInfo).toString();
     }
 }

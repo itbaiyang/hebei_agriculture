@@ -13,7 +13,7 @@ public class AccountInfo {
 	private String companyId;
 	private String roleId;
 	private String phoneNumber;
-
+    private String auditing;
 
 	public int getId() {
 		return id;
@@ -86,4 +86,12 @@ public class AccountInfo {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
+
+    public String getAuditing() {
+        return auditing;
+    }
+
+    public void setAuditing(String auditing) {
+        this.auditing = auditing;
+    }
 }
