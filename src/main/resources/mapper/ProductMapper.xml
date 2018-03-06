@@ -64,4 +64,15 @@
         SELECT id, typeName
         FROM product_type
     </select>
+
+    <select id="existObject" resultType="HashMap">
+        SELECT count(*)
+        FROM product_object
+        WHERE objectName = #{objectName}
+    </select>
+    <insert id="insertObject">
+        INSERT INTO product_object (objectName, openFlag, cUserId, unit, productType, createDate)
+            VALUE (#{objectName}, #{openFlag}, #{cUserId}, #{unit}, #{productType}, NOW())
+    </insert>
+
 </mapper>

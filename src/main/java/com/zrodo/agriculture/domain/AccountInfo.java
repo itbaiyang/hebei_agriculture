@@ -10,8 +10,8 @@ public class AccountInfo {
 	private String password;
 	private String type;
 	private String deptId;
-	private String companyId;
-	private String roleId;
+    private int companyId;
+    private String roleId;
 	private String phoneNumber;
     private String auditing;
 
@@ -63,12 +63,12 @@ public class AccountInfo {
 		this.deptId = deptId;
 	}
 
-	public String getCompanyId() {
-		return companyId;
+    public int getCompanyId() {
+        return companyId;
 	}
 
-	public void setCompanyId(String companyId) {
-		this.companyId = companyId;
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
 	}
 
 	public String getRoleId() {

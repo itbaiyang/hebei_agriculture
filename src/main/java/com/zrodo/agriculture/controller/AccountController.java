@@ -10,7 +10,6 @@ import com.zrodo.agriculture.util.json.JsonStatus;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -74,12 +73,12 @@ public class AccountController {
         return json;
     }
 
-    @PostMapping(value = "/logout")
+    @GetMapping(value = "/logout")
     @ApiOperation(value = "退出", notes = "退出登录")
-    public String hello(HttpServletRequest request,
-                        @ApiParam(required = true, name = "token", value = "token") @RequestHeader String token)
+    public String hello(HttpServletRequest request)
     {
         try {
+            String token = request.getHeader("token");
             String tokenValue = redisTemplate.boundValueOps(token).get();
             if (tokenValue != null) {
                 redisTemplate.delete(token);
@@ -95,8 +94,16 @@ public class AccountController {
     @RequestMapping(value = "getUserInfoByToken", method = {RequestMethod.GET})
     @ApiOperation(value = "根据token获取用户", notes = "")
     public String getUserInfoByToken(HttpServletRequest request) {
-        AccountInfo accountInfo = Token.getUser(request);
-
-        return JSONObject.fromObject(accountInfo).toString();
+        String json;
+        AccountInfo accountInfo = null;
+        try {
+            accountInfo = Token.getUser(request);
+            Map<String, Object> map = JsonMapUtils.buildSuccessMap();
+            map.put("result", accountInfo);
+            json = Tool.getJsonFromObect(map);
+        } catch (Exception e) {
+            json = JsonStatus.failure();
+        }
+        return json;
     }
 }

@@ -1,6 +1,7 @@
 package com.zrodo.agriculture.repository;
 
 import com.zrodo.agriculture.entity.Product;
+import com.zrodo.agriculture.entity.TObject;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -26,4 +27,10 @@ public interface ProductMapper {
     public Map<String, Object> queryProductById(Integer id);
 
     public List<Map<String, Object>> queryProductType();
+
+    public int existObject(@Param("objectName") String objectName);
+
+    public int insertObject(TObject tObject);
+
+    public List<Map<String, Object>> getObjectList(@Param("type") String type);
 }

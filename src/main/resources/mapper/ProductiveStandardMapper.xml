@@ -3,8 +3,8 @@
 <mapper namespace="com.zrodo.agriculture.repository.ProductiveStandardMapper">
 
     <insert id="addProductiveStandard">
-        INSERT INTO productive_standard(name,objectId,createDate,cUserId,companyId,productType)
-        VALUE (#{name},#{objectId},#{createDate},#{cUserId},#{companyId},#{productTypeId})
+        INSERT INTO productive_standard(name,objectId,cUserId,companyId,createDate)
+        VALUE (#{name},#{objectId},#{cUserId},#{companyId}, now())
     </insert>
 
     <delete id="deleteProductiveStandard">
@@ -28,7 +28,7 @@
         su.userName
         FROM productive_standard ps
         LEFT JOIN product_object po ON ps.objectId = po.objectId
-        LEFT JOIN product_type pt ON ps.productType = pt.typeId
+        LEFT JOIN product_type pt ON po.productType = pt.id
         LEFT JOIN sys_company sc ON ps.companyId = sc.companyId
         LEFT JOIN sys_user su ON ps.cUserId = su.userId
         <where>
@@ -39,11 +39,29 @@
                 AND objectId = #{objectId}
             </if>
             <if test="productType!=null and productType!='' ">
-                AND pt.productType = #{productType}
+                AND po.productType = #{productType}
             </if>
         </where>
         ORDER BY createDate
         LIMIT #{startNo},#{pageSize}
+    </select>
+
+    <select id="queryProductiveStandardListCount" resultType="Integer">
+        SELECT
+        count(*)
+        FROM productive_standard ps
+        LEFT JOIN product_object po ON ps.objectId = po.objectId
+        <where>
+            <if test="companyId!= null and companyId!= '' ">
+                ps.companyId = #{companyId}
+            </if>
+            <if test="objectId!=null and objectId!='' ">
+                AND objectId = #{objectId}
+            </if>
+            <if test="productType!=null and productType!='' ">
+                AND po.productType = #{productType}
+            </if>
+        </where>
     </select>
 
     <select id="queryProductiveStandardById" resultType="HashMap">
@@ -61,6 +79,11 @@
             LEFT JOIN sys_company sc ON ps.companyId = sc.companyId
             LEFT JOIN sys_user su ON ps.cUserId = su.userId
         WHERE ps.standardId = #{standardId}
+    </select>
+    <select id="queryProductiveStandardByName" resultType="Integer">
+        SELECT count(*)
+        FROM productive_standard
+        WHERE companyId = #{companyId} AND name = #{name} AND objectId = #{objectId}
     </select>
 
 </mapper>

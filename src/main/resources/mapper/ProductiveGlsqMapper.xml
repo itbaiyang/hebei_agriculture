@@ -4,7 +4,7 @@
 
     <insert id="addGlsq">
         INSERT INTO productive_standard_glsq(standardId,objectId,glsqName,subject,requirement,createDate)
-        VALUE (#{standardId},#{objectId},#{glsqName},#{subject},#{requirement},#{createDate})
+        VALUE (#{standardId},#{objectId},#{glsqName},#{subject},#{requirement}, now())
     </insert>
 
     <delete id="deleteGlsq">
