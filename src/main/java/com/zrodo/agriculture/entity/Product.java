@@ -1,9 +1,14 @@
 package com.zrodo.agriculture.entity;
 
-import java.util.Date;
+import io.swagger.annotations.ApiModelProperty;
 
+import java.util.Date;
 public class Product {
-    private String productId;
+    @ApiModelProperty(name = "id", value = "自增id（修改删除）", required = false)
+    private int id;
+    @ApiModelProperty(name = "productNo", value = "产品编号", hidden = true, required = false)
+    private String productNo;
+    @ApiModelProperty(name = "objectId", value = "产品名称id", hidden = true, required = false)
     private int objectId;
     private int productTypeId;
     private int cUserId;
@@ -13,15 +18,23 @@ public class Product {
     private int dutyTypeId;
     private String processNo;
     private int standardId;
-    private String owner;
-    private int pieceId;
+    private int acreId;
+    private String serialNumber;
 
-    public String getProductId() {
-        return productId;
+    public int getId() {
+        return id;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getProductNo() {
+        return productNo;
+    }
+
+    public void setProductNo(String productNo) {
+        this.productNo = productNo;
     }
 
     public int getObjectId() {
@@ -96,19 +109,19 @@ public class Product {
         this.standardId = standardId;
     }
 
-    public String getOwner() {
-        return owner;
+    public int getAcreId() {
+        return acreId;
     }
 
-    public void setOwner(String owner) {
-        this.owner = owner;
+    public void setAcreId(int acreId) {
+        this.acreId = acreId;
     }
 
-    public int getPieceId() {
-        return pieceId;
+    public String getSerialNumber() {
+        return serialNumber;
     }
 
-    public void setPieceId(int pieceId) {
-        this.pieceId = pieceId;
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 }

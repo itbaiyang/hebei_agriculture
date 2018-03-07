@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zrodo.agriculture.repository.AcreMapper">
+    <insert id="insertAcre" parameterType="com.zrodo.agriculture.entity.Acre" useGeneratedKeys="true"
+            keyProperty="acreId">
+        INSERT INTO company_acre (acreName, companyId, typeId, size, address, createDate)
+        VALUES (#{acreName}, #{companyId}, #{typeId}, #{size}, #{address}, NOW())
+    </insert>
+
+    <insert id="insertAcreImg">
+        INSERT INTO company_acre_img (acreId, url, createDate)
+        VALUES (#{acreId}, #{url}, NOW())
+    </insert>
+
+    <delete id="deleteAcreImg">
+        DELETE FROM company_acre_img
+        WHERE id = #{id}
+    </delete>
+
+    <update id="updateAcre">
+        UPDATE company_acre SET
+        updateDate = NOW()
+        <if test="acreName != null and acreName != ''">
+            ,acreName = #{acreName}
+        </if>
+        <if test="companyId != null and companyId != ''">
+            ,companyId = #{companyId}
+        </if>
+        <if test="size != null and size != ''">
+            ,size = #{size}
+        </if>
+        <if test="address != null and address != ''">
+            ,address = #{address}
+        </if>
+        WHERE acreId = #{acreId}
+    </update>
+
+    <delete id="deleteAcre">
+        DELETE FROM company_acre
+        WHERE acreId = #{acreId}
+    </delete>
+
+    <select id="queryAcreList" resultType="java.util.HashMap" statementType="CALLABLE">
+        SELECT acreId,acreName,companyId,size,typeName,tca.typeId,address,
+        createDate
+        FROM company_acre tca
+        LEFT JOIN company_acre_type tcat ON tca.typeId = tcat.typeId
+        WHERE tca.companyId LIKE '${companyId}%'
+        <if test="startDate != null and startDate != ''">
+            AND DATE_FORMAT(tca.createDate, '%Y-%m-%d') &gt;= DATE_FORMAT(#{startDate}, '%Y-%m-%d')
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND DATE_FORMAT(tca.createDate, '%Y-%m-%d') &lt;= DATE_FORMAT(#{endDate}, '%Y-%m-%d')
+        </if>
+        <if test="acreName != null and acreName !=0">
+            AND tca.acreName LIKE '%${acreName}%'
+        </if>
+        <if test="typeId != null and typeId !=0">
+            AND tca.typeId = #{typeId}
+        </if>
+        LIMIT #{startNo},#{pageSize}
+    </select>
+
+    <select id="queryAcreListCount" resultType="Integer">
+        SELECT count(1)
+        FROM company_acre tca
+        WHERE tca.companyId LIKE '${companyId}%'
+        <if test="startDate != null and startDate != ''">
+            AND DATE_FORMAT(tca.createDate, '%Y-%m-%d') &gt;= DATE_FORMAT(#{startDate}, '%Y-%m-%d')
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND DATE_FORMAT(tca.createDate, '%Y-%m-%d') &lt;= DATE_FORMAT(#{endDate}, '%Y-%m-%d')
+        </if>
+        <if test="acreName != null and acreName !=0">
+            AND tca.acreName LIKE '%${acreName}%'
+        </if>
+        <if test="typeId != null and typeId !=0">
+            AND tca.typeId = #{typeId}
+        </if>
+    </select>
+
+    <select id="queryAcreById" resultType="java.util.HashMap" statementType="CALLABLE">
+        SELECT
+            acreId,
+            acreName,
+            companyId,
+            deptName,
+            size,
+            tca.createDate,
+            typeName,
+            tca.typeId,
+            tca.address
+        FROM company_acre tca
+            LEFT JOIN company_acre_type tcat ON tca.typeId = tcat.typeId
+            LEFT JOIN sys_dept scs ON tca.companyId = scs.deptId
+        WHERE acreId = #{acreId}
+    </select>
+    <select id="queryAcreImgList" resultType="java.util.HashMap" statementType="CALLABLE">
+        SELECT
+            id,
+            url
+        FROM company_acre_img
+        WHERE acreId = #{acreId}
+    </select>
+    <select id="queryAcreTypeList" resultType="java.util.HashMap" statementType="CALLABLE">
+        SELECT
+            typeId,
+            typeName
+        FROM company_acre_type
+    </select>
+</mapper>

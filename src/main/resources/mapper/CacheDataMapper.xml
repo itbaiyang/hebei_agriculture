@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zrodo.agriculture.repository.CacheDataMapper">
+
+    <select id="getCity" resultType="java.util.HashMap">
+        SELECT
+            sc.cityId,
+            sc.cityName,
+            sc.pid,
+            sc.zone,
+            sc.root
+        FROM sys_city sc
+        WHERE LENGTH(sc.cityId) &lt;= 2
+    </select>
+
+    <select id="getReagent" resultType="java.util.HashMap" statementType="CALLABLE">
+        SELECT
+            t.reagentId,
+            t.reagentName
+        FROM detect_reagent t
+        WHERE t.openFlag = 1
+    </select>
+
+    <select id="getItem" resultType="java.util.HashMap" statementType="CALLABLE">
+        SELECT
+            itemId,
+            itemName
+        FROM detect_item
+        WHERE openFlag = 1
+    </select>
+
+    <select id="getSample" resultType="java.util.HashMap" statementType="CALLABLE">
+        SELECT
+            sampleId,
+            sampleName
+        FROM detect_sample
+        WHERE OPENFLAG = 1
+    </select>
+
+    <select id="getDeptLevel" resultType="java.util.HashMap" statementType="CALLABLE">
+        SELECT
+            levelId,
+            levelName
+        FROM sys_dept_level
+        WHERE OPENFLAG = 1
+    </select>
+
+    <select id="getObject" resultType="java.util.HashMap" statementType="CALLABLE">
+        SELECT
+            objectId,
+            objectName
+        FROM product_object
+        WHERE openFlag = 1
+    </select>
+
+    <select id="getSource" resultType="java.util.HashMap" statementType="CALLABLE">
+        SELECT
+            sourceId,
+            sourceName
+        FROM detect_source
+        WHERE openFlag = 1
+    </select>
+
+    <select id="getResult" resultType="java.util.HashMap" statementType="CALLABLE">
+        SELECT
+            resultId,
+            resultName
+        FROM detect_result
+        WHERE openFlag = 1
+    </select>
+
+    <select id="getTache" resultType="java.util.HashMap" statementType="CALLABLE">
+        SELECT
+            tacheId,
+            tacheName
+        FROM sample_tache
+        WHERE openflag = 1
+    </select>
+
+    <select id="getVideoServer" resultType="java.util.HashMap">
+        SELECT
+            serverIp,
+            serverPort
+        FROM video_server
+        WHERE serverId = #{serverId}
+    </select>
+
+    <!--<select id="getSensitivity" resultType="java.util.HashMap" >-->
+    <!--SELECT sensitivityId,sensitivityName-->
+    <!--FROM detect_sensitivity-->
+    <!--</select>-->
+
+    <select id="getDetReason" resultType="java.util.HashMap">
+        SELECT
+            reasonId,
+            reasonName
+        FROM detect_reason
+    </select>
+
+    <select id="getCardBrand" resultType="java.util.HashMap">
+        SELECT
+            supplierId,
+            supplierName
+        FROM t_supplier
+    </select>
+
+    <select id="getTaskGrade" resultType="java.util.HashMap">
+        SELECT
+            gradeId,
+            gradeName
+        FROM t_task_grade
+    </select>
+
+    <select id="getWeightMainUnit" resultType="java.util.HashMap">
+        SELECT
+            unitid,
+            mainname
+        FROM sys_weight_unit
+        WHERE openflag = '1'
+    </select>
+
+    <select id="getWeightUnit" resultType="java.util.HashMap">
+        SELECT
+            unitid,
+            unitname
+        FROM sys_weight_unit
+        WHERE openflag = '1'
+    </select>
+
+    <select id="getSingleWeightUnit" resultType="java.util.HashMap">
+        SELECT
+            unitid,
+            unitname
+        FROM sys_single_weight_unit
+        WHERE openflag = '1'
+    </select>
+
+    <select id="getProductDutyType" resultType="java.util.HashMap">
+        SELECT
+            typeId,
+            name
+        FROM product_duty_type
+        WHERE openflag = '1'
+    </select>
+
+    <select id="getSupervisionStatus" resultType="java.util.HashMap">
+        SELECT
+            statusid,
+            statusname
+        FROM sys_supervision_status
+        WHERE openflag = '1'
+    </select>
+
+    <select id="getSupervisionSubjects" resultType="java.util.HashMap">
+        SELECT
+            subjectid,
+            subjectname
+        FROM sys_supervision_subject
+        WHERE openflag = '1'
+    </select>
+
+    <!--<select id="getProcessTaches" resultType="java.util.HashMap" >-->
+    <!--SELECT tacheid,tachename-->
+    <!--FROM t_productive_tache_${product}-->
+    <!--where openflag = '1'-->
+    <!--</select>-->
+</mapper>

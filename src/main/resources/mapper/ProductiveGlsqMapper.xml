@@ -3,8 +3,8 @@
 <mapper namespace="com.zrodo.agriculture.repository.ProductiveGlsqMapper">
 
     <insert id="addGlsq">
-        INSERT INTO productive_standard_glsq(standardId,objectId,glsqName,subject,requirement,createDate)
-        VALUE (#{standardId},#{objectId},#{glsqName},#{subject},#{requirement}, now())
+        INSERT INTO productive_standard_glsq(standardId,glsqName,subject,requirement,createDate)
+        VALUE (#{standardId},#{glsqName},#{subject},#{requirement}, now())
     </insert>
 
     <delete id="deleteGlsq">
@@ -13,9 +13,17 @@
 
     <update id="updateGlsq">
         UPDATE productive_standard_glsq
-        SET glsqName = #{glsqName},
-            subject = #{subject},
-            requirement = #{requirement}
+        <set>
+            <if test="glsqName != null and glsqName != ''">
+                glsqName = #{glsqName},
+            </if>
+            <if test="subject != null and subject != ''">
+                subject = #{subject},
+            </if>
+            <if test="requirement != null and requirement != ''">
+                requirement = #{requirement}
+            </if>
+        </set>
         WHERE glsqId = #{glsqId}
     </update>
 

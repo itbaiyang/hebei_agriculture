@@ -45,9 +45,11 @@
     </select>
 
     <select id="queryUserByAccount" resultType="com.zrodo.agriculture.domain.AccountInfo" parameterType="com.zrodo.agriculture.domain.AccountInfo">
-        SELECT userId AS id, account, userName, password, type, deptId, su.companyId, roleId, phoneNumber, sc.auditing
+        SELECT userId AS id, account, userName, password, su.type, deptId, su.companyId,sc.companyName,
+        su.roleId,roleName, phoneNumber, sc.auditing
         FROM sys_user su
         LEFT JOIN sys_company sc ON su.companyId = sc.companyId
+        LEFT JOIN sys_role sr ON su.roleId = sr.roleId
         WHERE account = #{account}
     </select>
 </mapper>

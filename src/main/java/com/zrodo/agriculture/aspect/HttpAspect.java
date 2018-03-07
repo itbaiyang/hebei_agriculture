@@ -35,6 +35,8 @@ public class HttpAspect {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         // swagger插件放行
+//        String tokenKey = request.getHeaders("token");
+//        String tokenKey1 = request.getHeader("token");
         if (request.getHeader("token") != null) {
             String tokenKey = request.getHeader("token");
             // token未输入拦截

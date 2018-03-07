@@ -1,12 +1,7 @@
 package com.zrodo.agriculture.util;
 
 import com.zrodo.agriculture.domain.AccountInfo;
-import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -17,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
  * 2016年7月14日
  */
 public class Token {
-
     public static AccountInfo getUser(HttpServletRequest request) {
         AccountInfo accountInfo = null;
         try {

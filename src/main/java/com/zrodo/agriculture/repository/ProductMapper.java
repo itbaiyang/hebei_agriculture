@@ -11,26 +11,31 @@ import java.util.Map;
 @Repository
 public interface ProductMapper {
 
-    public int addProduct(Product product);
+    int addProduct(Product product);
 
-    public int deleteProduct(Integer id);
+    int deleteProduct(Integer id);
 
-    public int updateProduct(Product product);
+    int updateProduct(Product product);
 
-    public List<Map<String, Object>> queryProductList(@Param("companyId") Integer companyId,
+    List<Map<String, Object>> queryProductList(@Param("companyId") Integer companyId,
                                                       @Param("productType") Integer productType,
                                                       @Param("startDate") String startDate,
                                                       @Param("endDate") String endDate,
                                                       @Param("startNo") Integer startNo,
                                                       @Param("pageSize") Integer pageSize);
 
-    public Map<String, Object> queryProductById(Integer id);
+    Map<String, Object> queryProductById(Integer id);
 
-    public List<Map<String, Object>> queryProductType();
+    List<Map<String, Object>> queryProductType();
 
-    public int existObject(@Param("objectName") String objectName);
+    int existObject(@Param("objectName") String objectName);
 
-    public int insertObject(TObject tObject);
+    int getObjectId(@Param("objectName") String objectName);
 
-    public List<Map<String, Object>> getObjectList(@Param("type") String type);
+    void insertObject(TObject tObject);
+
+    List<TObject> queryObjectList(@Param("type") Integer type);
+
+    Integer getProductSequence(@Param("companyId") int companyId,
+                               @Param("iyear") int iyear);
 }

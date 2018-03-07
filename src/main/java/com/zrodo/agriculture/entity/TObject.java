@@ -40,6 +40,10 @@ public class TObject {
         this.unit = unit;
     }
 
+    public int getProductType() {
+        return productType;
+    }
+
     public void setProductType(int productType) {
         this.productType = productType;
     }

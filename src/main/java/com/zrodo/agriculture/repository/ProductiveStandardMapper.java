@@ -17,12 +17,14 @@ public interface ProductiveStandardMapper {
                                         @Param("name") String name);
 
     public List<Map<String, Object>> queryProductiveStandardList(@Param("companyId") Integer companyId,
+                                                                 @Param("standardName") String standardName,
                                                                  @Param("objectId") Integer objectId,
                                                                  @Param("productType") Integer productType,
                                                                  @Param("startNo") Integer startNo,
                                                                  @Param("pageSize") Integer pageSize);
 
     public Integer queryProductiveStandardListCount(@Param("companyId") Integer companyId,
+                                                    @Param("standardName") String standardName,
                                                     @Param("objectId") Integer objectId,
                                                     @Param("productType") Integer productType);
     public Map<String,Object>queryProductiveStandardById(Integer standardId);

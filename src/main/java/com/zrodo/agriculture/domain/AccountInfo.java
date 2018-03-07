@@ -1,7 +1,5 @@
 package com.zrodo.agriculture.domain;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
 public class AccountInfo {
 	private int id;
@@ -14,6 +12,8 @@ public class AccountInfo {
     private String roleId;
 	private String phoneNumber;
     private String auditing;
+	private String companyName;
+	private String roleName;
 
 	public int getId() {
 		return id;
@@ -94,4 +94,20 @@ public class AccountInfo {
     public void setAuditing(String auditing) {
         this.auditing = auditing;
     }
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
+	public String getRoleName() {
+		return roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
 }

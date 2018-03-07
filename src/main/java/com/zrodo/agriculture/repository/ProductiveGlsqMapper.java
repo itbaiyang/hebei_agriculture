@@ -9,16 +9,16 @@ import java.util.Map;
 
 @Repository
 public interface ProductiveGlsqMapper {
-    public int addGlsq(ProductiveStandardGlsq productiveStandardGlsq);
+    int addGlsq(ProductiveStandardGlsq productiveStandardGlsq);
 
-    public int deleteGlsq(Integer glsqId);
+    int deleteGlsq(Integer glsqId);
 
-    public int updateGlsq(@Param("glsqId") Integer glsqId,
-                          @Param("name") String name,
+    int updateGlsq(@Param("glsqId") Integer glsqId,
+                   @Param("glsqName") String glsqName,
                           @Param("subject") String subject,
                           @Param("requirement") String requirement);
 
-    public List<Map<String, Object>> queryGlsqListByStandard(@Param("standardId") Integer standardId);
+    List<Map<String, Object>> queryGlsqListByStandard(@Param("standardId") Integer standardId);
 
-    public Map<String,Object>queryGlsqById(Integer glsqId);
+    Map<String, Object> queryGlsqById(Integer glsqId);
 }

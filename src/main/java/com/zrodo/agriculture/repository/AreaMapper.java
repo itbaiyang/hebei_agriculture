@@ -10,22 +10,22 @@ import java.util.Map;
 
 @Repository
 public interface AreaMapper {
-    public void insertArea(SysArea sysArea);
+    void insertArea(SysArea sysArea);
 
-    public int deleteArea(@Param("areaId")Integer areaId);
+    int deleteArea(@Param("areaId") Integer areaId);
 
-    public void deleteAreaList(@Param("areaNo")Integer areaNo);
+    void deleteAreaList(@Param("areaNo") Integer areaNo);
 
-    public int updateArea(SysArea sysArea);
+    int updateArea(SysArea sysArea);
 
-    public List<Map<String,Object>> queryAreaList(@Param("pId") Integer pId,
+    List<Map<String, Object>> queryAreaList(@Param("pId") Integer pId,
                                                   @Param("areaNo") Integer areaNo,
                                                   @Param("startNo") Integer startNo,
                                                   @Param("pageSize") Integer pageSize);
 
-    public List<Map<String, Object>> queryAreaListByLevel(@Param("levelId") Integer levelId);
+    List<Map<String, Object>> queryAreaListByLevel(@Param("levelId") Integer levelId);
 
-    public Map<String,Object> queryAreaById(Integer areaId);
+    Map<String, Object> queryAreaById(Integer areaId);
 
-    public List<SysCity> getCityListById(@Param("cityId") Integer cityId);
+    List<SysCity> getCityListById(@Param("cityId") Integer cityId);
 }

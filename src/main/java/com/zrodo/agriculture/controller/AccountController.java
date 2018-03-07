@@ -1,6 +1,7 @@
 package com.zrodo.agriculture.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zrodo.agriculture.config.CacheData;
 import com.zrodo.agriculture.domain.AccountInfo;
 import com.zrodo.agriculture.repository.UserMapper;
 import com.zrodo.agriculture.util.Token;
@@ -10,12 +11,15 @@ import com.zrodo.agriculture.util.json.JsonStatus;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -34,6 +38,9 @@ public class AccountController {
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+
+    @Resource(name = "cacheData")
+    private CacheData cacheData;
 
     @PostMapping(value = "/login")
     @ApiOperation(value = "登录", notes = "登录")
@@ -106,4 +113,14 @@ public class AccountController {
         }
         return json;
     }
+
+
+    @GetMapping(value = "/getitemcache")
+    public String getItemCache(@RequestHeader String token, @PathVariable String area, HttpServletRequest request,
+                               @ApiParam(required = false, name = "type", value = "基础数据类型") @RequestParam(value = "type", required = false) String type) {
+        AccountInfo operateUser = Token.getUser(request);
+        Object result;
+        return "123";
+    }
+
 }

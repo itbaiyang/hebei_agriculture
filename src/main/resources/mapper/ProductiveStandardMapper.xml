@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zrodo.agriculture.repository.ProductiveStandardMapper">
 
-    <insert id="addProductiveStandard">
+    <insert id="addProductiveStandard" parameterType="com.zrodo.agriculture.entity.ProductiveStandard"
+            useGeneratedKeys="true" keyProperty="standardId">
         INSERT INTO productive_standard(name,objectId,cUserId,companyId,createDate)
         VALUE (#{name},#{objectId},#{cUserId},#{companyId}, now())
     </insert>
@@ -28,12 +29,15 @@
         su.userName
         FROM productive_standard ps
         LEFT JOIN product_object po ON ps.objectId = po.objectId
-        LEFT JOIN product_type pt ON po.productType = pt.id
+        LEFT JOIN product_type pt ON po.productType = pt.typeId
         LEFT JOIN sys_company sc ON ps.companyId = sc.companyId
         LEFT JOIN sys_user su ON ps.cUserId = su.userId
         <where>
             <if test="companyId!= null and companyId!= '' ">
                 ps.companyId = #{companyId}
+            </if>
+            <if test="standardName!= null and standardName!= '' ">
+                ps.standardName LIKE '%#{standardName}%'
             </if>
             <if test="objectId!=null and objectId!='' ">
                 AND objectId = #{objectId}
@@ -54,6 +58,9 @@
         <where>
             <if test="companyId!= null and companyId!= '' ">
                 ps.companyId = #{companyId}
+            </if>
+            <if test="standardName!= null and standardName!= '' ">
+                ps.standardName LIKE '%#{standardName}%'
             </if>
             <if test="objectId!=null and objectId!='' ">
                 AND objectId = #{objectId}

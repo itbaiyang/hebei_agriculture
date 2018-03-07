@@ -3,10 +3,10 @@
 <mapper namespace="com.zrodo.agriculture.repository.ProductMapper">
 
     <insert id="addProduct">
-        INSERT INTO product(productNo,objectId,productType,cUserId,createDate,companyId,description,dutyTypeId,
-        processNo,standardId,owner,pieceId)
-        VALUE (#{productNo},#{objectId},#{productTypeId},#{cUserId},NOW(),#{companyId},#{description},
-        #{dutyTypeId},#{processNo},#{standardId},#{owner},#{pieceId})
+        INSERT INTO product(productNo, objectId, productType, cUserId, createDate, companyId, description, dutyTypeId,
+                            processNo, serialNumber, standardId, acreId)
+        VALUE (#{productNo}, #{objectId}, #{productTypeId}, #{cUserId}, NOW(), #{companyId}, #{description},
+                             #{dutyTypeId}, #{processNo}, #{serialNumber}, #{standardId}, #{acreId})
     </insert>
 
     <delete id="deleteProduct">
@@ -15,14 +15,20 @@
 
     <update id="updateProduct">
         UPDATE product
-        SET productTypeId = #{productTypeId},
-            companyId = #{companyId},
-            description = #{description},
-            dutyTypeId = #{dutyTypeId},
-            processNo = #{processNo},
-            owner = #{owner},
-            pieceId = #{pieceId},
-            standardId = #{standardId}
+        <set>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="dutyTypeId != null and dutyTypeId != ''">
+                dutyTypeId = #{dutyTypeId},
+            </if>
+            <if test="acreId != null and acreId != ''">
+                acreId = #{acreId},
+            </if>
+            <if test="standardId != null and standardId != ''">
+                standardId = #{standardId},
+            </if>
+        </set>
         WHERE id = #{id}
     </update>
 
@@ -65,14 +71,39 @@
         FROM product_type
     </select>
 
-    <select id="existObject" resultType="HashMap">
+    <select id="existObject" resultType="Integer">
         SELECT count(*)
         FROM product_object
         WHERE objectName = #{objectName}
     </select>
-    <insert id="insertObject">
+
+    <select id="getObjectId" resultType="Integer">
+        SELECT objectId
+        FROM product_object
+        WHERE objectName = #{objectName}
+    </select>
+
+    <insert id="insertObject" parameterType="com.zrodo.agriculture.entity.TObject" useGeneratedKeys="true"
+            keyProperty="objectId">
         INSERT INTO product_object (objectName, openFlag, cUserId, unit, productType, createDate)
             VALUE (#{objectName}, #{openFlag}, #{cUserId}, #{unit}, #{productType}, NOW())
     </insert>
+    <select id="queryObjectList" resultType="com.zrodo.agriculture.entity.TObject"
+            parameterType="com.zrodo.agriculture.entity.TObject">
+        SELECT
+            objectId,
+            objectName,
+            cUserId,
+            unit,
+            createDate,
+            productType
+        FROM product_object
+        WHERE #{type} &amp; productType &gt; 0
+              AND openFlag = 1
+        ORDER BY createDate
+    </select>
 
+    <select id="getProductSequence" resultType="Integer">
+        SELECT product_seq_nextval(#{companyId}, #{iyear});
+    </select>
 </mapper>
