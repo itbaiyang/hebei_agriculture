@@ -151,4 +151,13 @@
         </choose>
         WHERE d.detectId = #{detectId}
     </select>
+
+    <insert id="addDetectImages">
+        INSERT INTO detect_img(detectId,url)
+        VALUE (#{detectId},#{url})
+    </insert>
+
+    <delete id="deleteDetectImages">
+        DELETE FROM detect_img WHERE detectId = #{detectId}
+    </delete>
 </mapper>

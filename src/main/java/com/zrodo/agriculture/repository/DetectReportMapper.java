@@ -2,19 +2,22 @@ package com.zrodo.agriculture.repository;
 
 import com.zrodo.agriculture.entity.DetectReport;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 
+@Repository
 public interface DetectReportMapper {
 
-    public int addDetectReport(DetectReport detectReport);
+    void addDetectReport(DetectReport detectReport);
 
-    public int deleteDetectReport(Integer detectId);
+    void deleteDetectReport(Integer detectId);
 
-    public int updateDetectReport(DetectReport detectReport);
 
-    public List<Map<String,Object>> queryDetectReportList(@Param("areaId") Integer areaId,
+    int updateDetectReport(DetectReport detectReport);
+
+    List<Map<String, Object>> queryDetectReportList(@Param("areaId") Integer areaId,
                                                           @Param("companyId") Integer companyId,
                                                           @Param("objectId") Integer objectId,
                                                           @Param("itemId") Integer itemId,
@@ -28,10 +31,15 @@ public interface DetectReportMapper {
 //                                                                  @Param("startNo")Integer startNo,
 //                                                                  @Param("pageSize")Integer pageSize);
 
-    public List<Map<String,Object>> queryDetectReportListBySample(@Param("sampleId") Integer sampleId,
-                                                                  @Param("startNo") Integer startNo,
-                                                                  @Param("pageSize") Integer pageSize);
+    List<Map<String, Object>> queryDetectReportListBySample(@Param("sampleId") Integer sampleId,
+                                                            @Param("startNo") Integer startNo,
+                                                            @Param("pageSize") Integer pageSize);
 
-    public Map<String,Object>queryDetectReportById(Integer detectId);
+    Map<String, Object> queryDetectReportById(Integer detectId);
+
+
+    void addDetectImages(@Param("detectId") int detectId, @Param("url") String url);
+
+    void deleteDetectImages(Integer detectId);
 
 }

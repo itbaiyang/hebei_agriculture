@@ -2,11 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zrodo.agriculture.repository.SampleMapper">
 
-    <insert id="addSample">
-        INSERT INTO sample(sampleNo,productId,objectId,sampleId,sampleUrl,sampleVideoUrl,sampleSource,
-                           sampleTemp,cUserId,createDate)
-        VALUE (#{sampleNo},#{productId},#{objectId},#{sampleId},#{sampleUrl},#{sampleVideoUrl},#{sampleSource},
-        #{sampleTemp},#{cUserId},#{createDate})
+    <insert id="addSample" parameterType="com.zrodo.agriculture.entity.Sample"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sample(sampleNo,productId,sampleId,tacheId,cUserId,createDate)
+        VALUE (#{sampleNo},#{productId},#{sampleId},#{tacheId},#{cUserId}, now())
     </insert>
 
     <delete id="deleteSample">
@@ -14,81 +13,105 @@
     </delete>
 
     <!--应该用不到，如果添加后台管理可以备用-->
-    <update id="updateSample">
-        UPDATE sample
-        SET productId = #{productId},
-            objectId = #{objectId},
-            sampleUrl = #{sampleUrl},
-            sampleVideoUrl = #{sampleVideoUrl},
-            sampleSource = #{sampleSource},
-            sampleTemp = #{sampleTemp},
-            cUserId = #{cUserId},
-            createDate = #{createDate}
-        WHERE id = #{id}
-    </update>
+    <!--<update id="updateSample">-->
+    <!--UPDATE sample-->
+    <!--SET sampleUrl = #{sampleUrl}-->
+    <!--WHERE id = #{id}-->
+    <!--</update>-->
 
     <select id="querySampleList" resultType="HashMap">
         SELECT
         s.id,
         s.sampleNo,
-        s.sampleSource,
+        s.tacheId,
+        st.tacheName,
+        ds.sampleName,
         p.productNo,
         sc.companyName,
         po.objectName,
-        su.userName AS cUserName
+        su.userName AS cUserName,
+        s.createDate
         FROM sample s
         LEFT JOIN product_object po ON s.objectId = po.objectId
         LEFT JOIN product p ON s.productId = p.id
         LEFT JOIN sys_company sc ON p.companyId = sc.companyId
+        LEFT JOIN sample_tache st ON s.tacheId = st.tacheId
+        LEFT JOIN detect_sample ds ON s.sampleId = ds.sampleId
         LEFT JOIN sys_user su ON p.cUserId = su.userId
         <where>
-            <if test="areaId!= null and areaId!= '' ">
+            <if test="areaId!= null and areaId!= ''">
                 sc.areaId = #{areaId}
             </if>
-            <if test="companyId!= null and companyId!= '' ">
-                p.companyId = #{companyId}
+            <if test="companyId!= null and companyId!= ''">
+                AND p.companyId = #{companyId}
             </if>
-            <if test="objectId!=null and objectId!='' ">
-                AND objectId = #{objectId}
+            <if test="productTypeId!= null and productTypeId!= ''">
+                AND p.productTypeId = #{productTypeId}
             </if>
-            <if test="flag!=null and flag!='' ">
-                AND flag = #{flag}
+            <if test="objectId!=null and objectId!=''">
+                AND s.objectId = #{objectId}
+            </if>
+            <if test="tacheId!=null and tacheId!=''">
+                AND s.tacheId = #{tacheId}
             </if>
         </where>
         ORDER BY createDate
         LIMIT #{startNo},#{pageSize}
     </select>
 
-    <select id="querySampleListByProduct" resultType="HashMap">
-        SELECT
-        s.id,
-        s.sampleNo,
-        s.sampleSource,
-        p.productNo,
-        sc.companyName,
-        po.objectName,
-        su.userName AS cUserName
+    <select id="querySampleListCount" resultType="Integer">
+        SELECT count(*)
         FROM sample s
         LEFT JOIN product_object po ON s.objectId = po.objectId
         LEFT JOIN product p ON s.productId = p.id
         LEFT JOIN sys_company sc ON p.companyId = sc.companyId
         LEFT JOIN sys_user su ON p.cUserId = su.userId
-        WHERE productId = #{productId}
+        <where>
+            <if test="areaId!= null and areaId!= ''">
+                sc.areaId = #{areaId}
+            </if>
+            <if test="companyId!= null and companyId!= ''">
+                AND p.companyId = #{companyId}
+            </if>
+            <if test="productTypeId!= null and productTypeId!= ''">
+                AND p.productTypeId = #{productTypeId}
+            </if>
+            <if test="objectId!=null and objectId!=''">
+                AND objectId = #{objectId}
+            </if>
+            <if test="sourceId!=null and sourceId!=''">
+                AND sourceId = #{sourceId}
+            </if>
+        </where>
         ORDER BY createDate
-        LIMIT #{startNo},#{pageSize}
+    </select>
+
+    <select id="querySampleListByProduct" resultType="HashMap">
+        SELECT
+        s.id,
+        s.sampleNo,
+        s.tacheId,
+        s.sampleDate,
+        s.createDate,
+        st.tacheName,
+        p.productNo,
+        sc.companyName,
+        po.objectName,
+        su.userName AS cUserName
+        FROM sample s
+        LEFT JOIN product p ON s.productId = p.id
+        LEFT JOIN product_object po ON p.objectId = po.objectId
+        LEFT JOIN sample_tache st ON s.tacheId = st.tacheId
+        LEFT JOIN sys_company sc ON p.companyId = sc.companyId
+        LEFT JOIN sys_user su ON p.cUserId = su.userId
+        WHERE productId = #{productId}
+        ORDER BY s.createDate
     </select>
 
     <select id="querySampleById" resultType="HashMap">
         SELECT
             s.id,
             s.sampleNo,
-            s.latitude,
-            s.longitude,
-            s.address,
-            s.sampleUrl,
-            s.sampleVideoUrl,
-            s.sampleTemp,
-            s.sampleSource,
             p.productNo,
             sc.companyName,
             po.objectName,

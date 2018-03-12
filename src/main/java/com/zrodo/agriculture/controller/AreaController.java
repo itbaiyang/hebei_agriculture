@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
-@Api(value = "区划", description = "区划增删改查")
+@Api(value = "区划", description = "区划管理")
 @RestController
 @Component
 public class AreaController {

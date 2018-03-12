@@ -40,7 +40,7 @@
                 ps.standardName LIKE '%#{standardName}%'
             </if>
             <if test="objectId!=null and objectId!='' ">
-                AND objectId = #{objectId}
+                AND po.objectId = #{objectId}
             </if>
             <if test="productType!=null and productType!='' ">
                 AND po.productType = #{productType}
@@ -63,7 +63,7 @@
                 ps.standardName LIKE '%#{standardName}%'
             </if>
             <if test="objectId!=null and objectId!='' ">
-                AND objectId = #{objectId}
+                AND po.objectId = #{objectId}
             </if>
             <if test="productType!=null and productType!='' ">
                 AND po.productType = #{productType}

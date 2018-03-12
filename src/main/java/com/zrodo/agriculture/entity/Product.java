@@ -4,21 +4,35 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 public class Product {
-    @ApiModelProperty(name = "id", value = "自增id（修改删除）", required = false)
+    @ApiModelProperty(name = "id", value = "自增id（修改删除）", hidden = true)
     private int id;
-    @ApiModelProperty(name = "productNo", value = "产品编号", hidden = true, required = false)
+    @ApiModelProperty(name = "productNo", value = "产品编号", hidden = true)
     private String productNo;
-    @ApiModelProperty(name = "objectId", value = "产品名称id", hidden = true, required = false)
+    @ApiModelProperty(name = "objectId", value = "产品名称id", required = true)
     private int objectId;
+    @ApiModelProperty(name = "productTypeId", value = "产品类型id", required = true)
     private int productTypeId;
+    @ApiModelProperty(name = "cUserId", value = "创建人", hidden = true)
     private int cUserId;
+    @ApiModelProperty(name = "createDate", value = "创建时间", hidden = true)
     private Date createDate;
-    private int CompanyId;
+    @ApiModelProperty(name = "companyId", value = "企业Id", hidden = true)
+    private int companyId;
+    @ApiModelProperty(name = "description", value = "产品描述")
     private String description;
+    @ApiModelProperty(name = "dutyTypeId", value = "责任类型", required = true)
     private int dutyTypeId;
+    @ApiModelProperty(name = "processNo", value = "产品日期类编号", hidden = true)
     private String processNo;
+    @ApiModelProperty(name = "standardId", value = "标准id", required = true)
     private int standardId;
+    @ApiModelProperty(name = "owner", value = "责任人", required = true)
+    private String owner;
+    @ApiModelProperty(name = "acreId", value = "地块Id", required = true)
     private int acreId;
+    @ApiModelProperty(name = "productDate", value = "预计产品生产时间", required = true)
+    private String productDate;
+    @ApiModelProperty(name = "serialNumber", value = "产品创建日序号", hidden = true)
     private String serialNumber;
 
     public int getId() {
@@ -70,11 +84,11 @@ public class Product {
     }
 
     public int getCompanyId() {
-        return CompanyId;
+        return companyId;
     }
 
     public void setCompanyId(int companyId) {
-        CompanyId = companyId;
+        this.companyId = companyId;
     }
 
     public String getDescription() {
@@ -109,12 +123,28 @@ public class Product {
         this.standardId = standardId;
     }
 
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
     public int getAcreId() {
         return acreId;
     }
 
     public void setAcreId(int acreId) {
         this.acreId = acreId;
+    }
+
+    public String getProductDate() {
+        return productDate;
+    }
+
+    public void setProductDate(String productDate) {
+        this.productDate = productDate;
     }
 
     public String getSerialNumber() {

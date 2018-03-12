@@ -2,33 +2,43 @@ package com.zrodo.agriculture.repository;
 
 import com.zrodo.agriculture.entity.Sample;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 
+@Repository
 public interface SampleMapper {
 
-    public int addSample(Sample sample);
+    int addSample(Sample sample);
 
-    public int deleteSample(Integer id);
+    void deleteSample(Integer id);
 
-    public int updateSample(Sample sample);
+    int updateSample(@Param("id") Integer id,
+                     @Param("sampleUrl") Integer sampleUrl);
 
-    public List<Map<String,Object>> querySampleList(@Param("areaId") Integer areaId,
-                                                    @Param("companyId") Integer companyId,
-                                                    @Param("objectId") Integer objectId,
-                                                    @Param("flag") Integer flag,
-                                                    @Param("startDate") String startDate,
-                                                    @Param("endDate") String endDate,
-                                                    @Param("startNo") Integer startNo,
-                                                    @Param("pageSize") Integer pageSize);
+    List<Map<String, Object>> querySampleList(@Param("areaId") Integer areaId,
+                                              @Param("companyId") Integer companyId,
+                                              @Param("productTypeId") Integer productTypeId,
+                                              @Param("objectId") Integer objectId,
+                                              @Param("resultId") Integer resultId,
+                                              @Param("tacheId") Integer tacheId,
+                                              @Param("startDate") String startDate,
+                                              @Param("endDate") String endDate,
+                                              @Param("startNo") Integer startNo,
+                                              @Param("pageSize") Integer pageSize);
 
-    public List<Map<String,Object>> querySampleListByProduct(@Param("productId") Integer productId,
-                                                             @Param("startDate") String startDate,
-                                                             @Param("endDate") String endDate,
-                                                             @Param("startNo") Integer startNo,
-                                                             @Param("pageSize") Integer pageSize);
+    int querySampleListCount(@Param("areaId") Integer areaId,
+                             @Param("companyId") Integer companyId,
+                             @Param("productTypeId") Integer productTypeId,
+                             @Param("objectId") Integer objectId,
+                             @Param("resultId") Integer resultId,
+                             @Param("tacheId") Integer tacheId,
+                             @Param("startDate") String startDate,
+                             @Param("endDate") String endDate);
 
-    public Map<String,Object>querySampleById(Integer id);
+    List<Map<String, Object>> querySampleListByProduct(@Param("productId") Integer productId);
+
+    Map<String, Object> querySampleById(Integer id);
 
 }

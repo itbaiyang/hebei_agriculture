@@ -3,8 +3,8 @@
 <mapper namespace="com.zrodo.agriculture.repository.AcreMapper">
     <insert id="insertAcre" parameterType="com.zrodo.agriculture.entity.Acre" useGeneratedKeys="true"
             keyProperty="acreId">
-        INSERT INTO company_acre (acreName, companyId, typeId, size, address, createDate)
-        VALUES (#{acreName}, #{companyId}, #{typeId}, #{size}, #{address}, NOW())
+        INSERT INTO company_acre (acreName, companyId, typeId, size, address,longitude,latitude, createDate)
+        VALUES (#{acreName}, #{companyId}, #{typeId}, #{size}, #{address},#{longitude},#{latitude}, NOW())
     </insert>
 
     <insert id="insertAcreImg">
@@ -29,16 +29,23 @@
         <if test="size != null and size != ''">
             ,size = #{size}
         </if>
+        <if test="longitude != null and longitude != ''">
+            ,longitude = #{longitude}
+        </if>
+        <if test="latitude != null and latitude != ''">
+            ,latitude = #{latitude}
+        </if>
         <if test="address != null and address != ''">
             ,address = #{address}
         </if>
         WHERE acreId = #{acreId}
     </update>
 
-    <delete id="deleteAcre">
-        DELETE FROM company_acre
+    <update id="deleteAcre">
+        UPDATE company_acre
+        SET updateDate = now(), openFlag = 1
         WHERE acreId = #{acreId}
-    </delete>
+    </update>
 
     <select id="queryAcreList" resultType="java.util.HashMap" statementType="CALLABLE">
         SELECT acreId,acreName,companyId,size,typeName,tca.typeId,address,
@@ -46,6 +53,7 @@
         FROM company_acre tca
         LEFT JOIN company_acre_type tcat ON tca.typeId = tcat.typeId
         WHERE tca.companyId LIKE '${companyId}%'
+        AND tca.openFlag = 0
         <if test="startDate != null and startDate != ''">
             AND DATE_FORMAT(tca.createDate, '%Y-%m-%d') &gt;= DATE_FORMAT(#{startDate}, '%Y-%m-%d')
         </if>

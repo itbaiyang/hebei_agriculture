@@ -3,10 +3,9 @@ package com.zrodo.agriculture.controller;
 import com.zrodo.agriculture.domain.AccountInfo;
 import com.zrodo.agriculture.entity.ProductiveStandard;
 import com.zrodo.agriculture.entity.ProductiveStandardGlsq;
-import com.zrodo.agriculture.entity.TObject;
-import com.zrodo.agriculture.repository.ProductMapper;
 import com.zrodo.agriculture.repository.ProductiveGlsqMapper;
 import com.zrodo.agriculture.repository.ProductiveStandardMapper;
+import com.zrodo.agriculture.service.StandardService;
 import com.zrodo.agriculture.util.Page;
 import com.zrodo.agriculture.util.Token;
 import com.zrodo.agriculture.util.Tool;
@@ -29,15 +28,16 @@ import java.util.Map;
 @RestController
 @Component
 public class StandardController {
+
     @Autowired
     private ProductiveStandardMapper standardMapper;
     @Autowired
     private ProductiveGlsqMapper glsqMapper;
     @Autowired
-    private ProductMapper productMapper;
+    private StandardService standardService;
 
     @PostMapping(value = "addProductiveStandard")
-    @ApiOperation(value = "新增生产标准", notes = "")
+    @ApiOperation(value = "新增生产标准", notes = "新增生产标准")
     public String addProductiveStandard(HttpServletRequest request,
                                         @ModelAttribute ProductiveStandard productiveStandard) {
         String json;
@@ -48,33 +48,7 @@ public class StandardController {
             if (StringUtils.isBlank(productiveStandard.getObjectName())) {
                 json = JsonStatus.paramNullError("产品名称为空");
             } else {
-                int num = productMapper.existObject(productiveStandard.getObjectName());
-                if (num == 0) {
-                    TObject tObject = new TObject();
-                    tObject.setObjectName(productiveStandard.getObjectName());
-                    tObject.setOpenFlag("1");
-                    if (productiveStandard.getProductTypeId() == 2) {
-                        tObject.setUnit("头");
-                    } else {
-                        tObject.setUnit("公斤");
-                    }
-                    tObject.setcUserId(String.valueOf(productiveStandard.getcUserId()));
-                    tObject.setProductType(productiveStandard.getProductTypeId());
-                    productMapper.insertObject(tObject);
-                    productiveStandard.setObjectId(tObject.getObjectId());
-                } else {
-                    productiveStandard.setObjectId(productMapper.getObjectId(productiveStandard.getObjectName()));
-                }
-                int count = standardMapper.queryProductiveStandardByName(productiveStandard.getCompanyId(),
-                        productiveStandard.getObjectId(), productiveStandard.getName());
-                if (count > 0) {
-                    json = JsonStatus.validationError("该标准已经存在,如有需要,可以返回上级页面对该标准进行编辑");
-                } else {
-                    standardMapper.addProductiveStandard(productiveStandard);
-                    Map<String, Object> map = JsonMapUtils.buildSuccessMap();
-                    map.put("result", productiveStandard);
-                    json = Tool.getJsonFromObect(map);
-                }
+                json = standardService.addProductiveStandard(productiveStandard);
             }
         } catch (Exception e) {
             json = JsonStatus.failure();
@@ -83,9 +57,8 @@ public class StandardController {
     }
 
     @DeleteMapping(value = "deleteProductiveStandard")
-    @ApiOperation(value = "删除生产标准", notes = "")
-    public String deleteProductiveStandard(HttpServletRequest request,
-                                           @ApiParam(required = true, name = "standardId", value = "标准编号")
+    @ApiOperation(value = "删除生产标准", notes = "删除生产标准")
+    public String deleteProductiveStandard(@ApiParam(required = true, name = "standardId", value = "标准编号")
                                            @RequestParam int standardId) {
         String json;
         try {
@@ -98,9 +71,8 @@ public class StandardController {
     }
 
     @PutMapping(value = "updateProductiveStandard")
-    @ApiOperation(value = "修改生产标准", notes = "")
-    public String updateProductiveStandard(HttpServletRequest request,
-                                           @ApiParam(required = true, name = "standardId", value = "标准编号")
+    @ApiOperation(value = "修改生产标准", notes = "修改生产标准")
+    public String updateProductiveStandard(@ApiParam(required = true, name = "standardId", value = "标准编号")
                                            @RequestParam int standardId,
                                            @ApiParam(required = true, name = "name", value = "标准名称")
                                            @RequestParam String name) {
@@ -137,7 +109,7 @@ public class StandardController {
                 companyId = accountInfo.getCompanyId();
             }
 
-            List<Map<String, Object>> result = null;
+            List<Map<String, Object>> result;
             result = standardMapper.queryProductiveStandardList(companyId, standardName, objectId, productTypeId, (pageNo - 1) * pageSize, pageSize);
             int resultCount = standardMapper.queryProductiveStandardListCount(companyId, standardName, objectId, productTypeId);
             Page page = new Page(result, pageNo, pageSize, resultCount);
@@ -150,8 +122,7 @@ public class StandardController {
 
     @GetMapping(value = "/standardListObject")
     @ApiOperation(value = "查询固定产品类型的生产标准列表", notes = "查询固定产品类型的生产标准列表")
-    public String standardListObject(HttpServletRequest request,
-                                     @ApiParam(name = "objectId", value = "产品名称Id")
+    public String standardListObject(@ApiParam(name = "objectId", value = "产品名称Id")
                                      @RequestParam(value = "objectId") Integer objectId,
                                      @ApiParam(required = true, name = "pageNo", value = "页码")
                                      @RequestParam(defaultValue = "1") Integer pageNo,
@@ -160,7 +131,7 @@ public class StandardController {
     ) {
         String json;
         try {
-            List<Map<String, Object>> result = null;
+            List<Map<String, Object>> result;
             result = standardMapper.queryProductiveStandardList(null, null, objectId, null, (pageNo - 1) * pageSize, pageSize);
             int resultCount = standardMapper.queryProductiveStandardListCount(null, null, objectId, null);
             Page page = new Page(result, pageNo, pageSize, resultCount);
@@ -173,8 +144,7 @@ public class StandardController {
 
     @PostMapping(value = "addProductiveGlsq")
     @ApiOperation(value = "新增管理时期", notes = "")
-    public String addProductiveGlsq(HttpServletRequest request,
-                                    @ModelAttribute ProductiveStandardGlsq productiveStandardGlsq) {
+    public String addProductiveGlsq(@ModelAttribute ProductiveStandardGlsq productiveStandardGlsq) {
         String json;
         try {
             glsqMapper.addGlsq(productiveStandardGlsq);
@@ -187,8 +157,7 @@ public class StandardController {
 
     @DeleteMapping(value = "deleteProductiveGlsq")
     @ApiOperation(value = "删除管理时期", notes = "")
-    public String deleteProductiveGlsq(HttpServletRequest request,
-                                       @ApiParam(required = true, name = "glsqId", value = "管理时期编号")
+    public String deleteProductiveGlsq(@ApiParam(required = true, name = "glsqId", value = "管理时期编号")
                                        @RequestParam int glsqId) {
         String json;
         try {
@@ -202,8 +171,7 @@ public class StandardController {
 
     @PutMapping(value = "updateProductiveGlsq")
     @ApiOperation(value = "修改管理时期", notes = "")
-    public String updateProductiveGlsq(HttpServletRequest request,
-                                       @ApiParam(required = true, name = "glsqId", value = "管理时期编号")
+    public String updateProductiveGlsq(@ApiParam(required = true, name = "glsqId", value = "管理时期编号")
                                        @RequestParam int glsqId,
                                        @ApiParam(name = "glsqName", value = "管理时期名称")
                                        @RequestParam(required = false) String glsqName,
@@ -266,16 +234,7 @@ public class StandardController {
                                @RequestParam(value = "copyStandardId") Integer copyStandardId) {
         String json;
         try {
-            List<Map<String, Object>> list = glsqMapper.queryGlsqListByStandard(copyStandardId);
-            for (Map<String, Object> item : list) {
-                ProductiveStandardGlsq productiveStandardGlsq = new ProductiveStandardGlsq();
-                productiveStandardGlsq.setStandardId(standardId);
-                productiveStandardGlsq.setGlsqName((String) item.get("glsqName"));
-                productiveStandardGlsq.setSubject((String) item.get("subject"));
-                productiveStandardGlsq.setRequirement((String) item.get("requirement"));
-                productiveStandardGlsq.setCreateDate(new Date());
-                glsqMapper.addGlsq(productiveStandardGlsq);
-            }
+            standardService.copyStandard(standardId, copyStandardId);
             json = JsonStatus.success();
         } catch (Exception e) {
             e.printStackTrace();

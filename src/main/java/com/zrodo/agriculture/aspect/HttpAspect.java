@@ -7,12 +7,16 @@ import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by baiyang on 2017/5/24.
@@ -21,29 +25,24 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 public class HttpAspect {
 
+    private static final String[] IGNORE_URI = {"login", "upload", "insertSample"};
     private final static Logger logger = LoggerFactory.getLogger(HttpAspect.class);
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+
+    @Value("${token.expire.time}")
+    private Long expireTime;
 
     @Pointcut("execution(public * com.zrodo.agriculture.controller.*.*(..))")
     public void log() {
     }
 
     @Before("log()")
-    public void doBefore(JoinPoint joinPoint) {
+    public boolean doBefore(JoinPoint joinPoint) {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
-        // swagger插件放行
-//        String tokenKey = request.getHeaders("token");
-//        String tokenKey1 = request.getHeader("token");
-        if (request.getHeader("token") != null) {
-            String tokenKey = request.getHeader("token");
-            // token未输入拦截
-            String tokenValue = redisTemplate.boundValueOps(tokenKey).get();
-            System.out.println("拦截器:" + tokenValue);
-            request.setAttribute("token", tokenValue);
-        }
+        HttpServletResponse response = attributes.getResponse();
         //url
         logger.info("url={}", request.getRequestURL());
 
@@ -58,11 +57,53 @@ public class HttpAspect {
 
         //参数
         logger.info("args={}", joinPoint.getArgs());
+
+        String url = request.getRequestURL().toString();
+        for (String s : IGNORE_URI) {
+            if (url.contains(s)) {
+                return true;
+            }
+        }
+        String tokenKey = request.getHeader("token");
+
+        if (StringUtils.isBlank(tokenKey)) {
+            writeMessageUtf8(response, JsonStatus.tokenExpire());
+            return false;
+        }
+
+        String tokenValue = redisTemplate.boundValueOps(tokenKey).get();
+
+        // 缓存中没有tokenValue，拦截
+        if (null == tokenValue) {
+            writeMessageUtf8(response, JsonStatus.tokenExpire());
+            return false;
+        }
+
+        System.out.println("拦截器:" + tokenValue);
+        request.setAttribute("token", tokenValue);
+        redisTemplate.boundValueOps(tokenKey).expire(expireTime, TimeUnit.MINUTES);
+        return true;
+    }
+
+    private void writeMessageUtf8(HttpServletResponse response, String str) {
+        response.setContentType("application/json;charset=UTF-8");
+        PrintWriter writer = null;
+        try {
+            writer = response.getWriter();
+            writer.println(str);
+            writer.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (writer != null) {
+                writer.close();
+            }
+        }
     }
 
     @After("log()")
     public void doAfter() {
-        logger.info("333333333333333");
+        logger.info("3-3-3-3-3-3-3-3-3-3-3-3");
     }
 
     @AfterReturning(returning = "object", pointcut = "log()")

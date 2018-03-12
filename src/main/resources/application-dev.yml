@@ -2,3 +2,10 @@ server:
   port: 8082
 #  context-path: /agriculture
 debug: true
+ftp:
+  address: 192.168.1.108
+  port: 21
+  username: zrodo
+  password: zrodo
+  basePath: agriculture/
+  path: acre,message,input

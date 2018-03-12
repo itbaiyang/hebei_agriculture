@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zrodo.agriculture.repository.CacheMapper">
+
+    <select id="queryProductType" resultType="HashMap">
+        SELECT id, typeName, typeId
+        FROM product_type
+    </select>
+
+    <select id="queryObjectList" resultType="com.zrodo.agriculture.entity.TObject"
+            parameterType="com.zrodo.agriculture.entity.TObject">
+        SELECT
+        objectId,
+        objectName,
+        cUserId,
+        unit,
+        createDate,
+        productType
+        FROM product_object
+        WHERE #{type} &amp; productType &gt; 0
+        AND openFlag = 1
+        ORDER BY createDate
+    </select>
+    <select id="queryDutyTypeList" resultType="HashMap">
+        SELECT *
+        FROM product_duty_type
+        WHERE openFlag = 1
+    </select>
+
+    <select id="querySampleTacheList" resultType="HashMap">
+        SELECT *
+        FROM sample_tache
+        WHERE openFlag = 1
+    </select>
+
+    <select id="querySampleNoList" resultType="HashMap">
+        SELECT *
+        FROM detect_sample
+        WHERE openFlag = 1
+    </select>
+
+    <select id="queryResultList" resultType="HashMap">
+        SELECT *
+        FROM detect_result
+        WHERE openFlag = 1
+    </select>
+
+    <select id="queryItemList" resultType="HashMap">
+        SELECT *
+        FROM detect_item
+        WHERE openFlag = 1
+    </select>
+
+    <select id="queryReagentList" resultType="HashMap">
+        SELECT *
+        FROM detect_reagent
+        WHERE openFlag = 1
+    </select>
+
+    <select id="querySourceList" resultType="HashMap">
+        SELECT *
+        FROM detect_source
+        WHERE openFlag = 1
+    </select>
+</mapper>

@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-@Api(value = "账号", description = "登录，登出，密码修改")
+@Api(value = "账号", description = "账号管理")
 @RestController
 @Component
 public class AccountController {

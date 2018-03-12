@@ -4,9 +4,9 @@
 
     <insert id="addProduct">
         INSERT INTO product(productNo, objectId, productType, cUserId, createDate, companyId, description, dutyTypeId,
-                            processNo, serialNumber, standardId, acreId)
+        processNo, productDate,owner, serialNumber, standardId, acreId)
         VALUE (#{productNo}, #{objectId}, #{productTypeId}, #{cUserId}, NOW(), #{companyId}, #{description},
-                             #{dutyTypeId}, #{processNo}, #{serialNumber}, #{standardId}, #{acreId})
+        #{dutyTypeId}, #{processNo}, #{productDate}, #{owner}, #{serialNumber}, #{standardId}, #{acreId})
     </insert>
 
     <delete id="deleteProduct">
@@ -22,19 +22,14 @@
             <if test="dutyTypeId != null and dutyTypeId != ''">
                 dutyTypeId = #{dutyTypeId},
             </if>
-            <if test="acreId != null and acreId != ''">
-                acreId = #{acreId},
-            </if>
-            <if test="standardId != null and standardId != ''">
-                standardId = #{standardId},
-            </if>
         </set>
         WHERE id = #{id}
     </update>
 
     <select id="queryProductList" resultType="HashMap">
-        SELECT p.id, p.productNo, pt.typeName, po.objectName,pdt.name AS dutyTypeName,
-        ps.name AS standardName, sc.companyName,su.userName,p.createDate,p.owner,sc.areaId
+        SELECT p.id, p.productNo, pt.typeName, po.objectName,pdt.name AS dutyTypeName,p.productDate,
+        ps.name AS standardName, sc.companyName,su.userName,p.createDate,sc.areaId,
+        (SELECT count(*) FROM sample s WHERE s.productId = p.id) AS sampleCount
         FROM product p
         LEFT JOIN product_object po ON p.objectId = po.objectId
         LEFT JOIN product_type pt ON p.productType = pt.typeId
@@ -43,20 +38,82 @@
         LEFT JOIN sys_company sc ON p.companyId = sc.companyId
         LEFT JOIN sys_user su ON p.cUserId = su.userId
         <where>
-            <if test="companyId!= null and companyId!= '' ">
+            <if test="companyId!= null and companyId!=0">
                 p.companyId = #{companyId}
             </if>
-            <if test="productType!=null and productType!='' ">
+            <if test="productType!=null and productType!=0">
                 AND p.productType = #{productType}
             </if>
+            <if test="objectName!=null and objectName!=''">
+                AND po.objectName like '#{objectName}'
+            </if>
+            <if test="dutyTypeId!=null and dutyTypeId!=0">
+                AND p.dutyTypeId = #{dutyTypeId}
+            </if>
+            <if test="acreId!=null and acreId!=0">
+                AND p.acreId = #{acreId}
+            </if>
+            <if test="startDate != null and startDate!=''">
+                AND DATE_FORMAT(p.createDate, '%Y-%m-%d') &gt;= DATE_FORMAT(#{startDate}, '%Y-%m-%d')
+            </if>
+            <if test="endDate != null and endDate!=''">
+                AND DATE_FORMAT(p.createDate, '%Y-%m-%d') &lt;= DATE_FORMAT(#{endDate}, '%Y-%m-%d')
+            </if>
         </where>
-        ORDER BY createDate
+        ORDER BY p.createDate
         LIMIT #{startNo},#{pageSize}
     </select>
 
+    <select id="queryProductListCount" resultType="Integer">
+        SELECT count(*)
+        FROM product p
+        LEFT JOIN product_object po ON p.objectId = po.objectId
+        LEFT JOIN product_type pt ON p.productType = pt.typeId
+        LEFT JOIN product_duty_type pdt ON p.dutyTypeId = pdt.typeId
+        LEFT JOIN productive_standard ps ON p.standardId = ps.standardId
+        LEFT JOIN sys_company sc ON p.companyId = sc.companyId
+        LEFT JOIN sys_user su ON p.cUserId = su.userId
+        <where>
+            <if test="companyId!= null and companyId!=0">
+                p.companyId = #{companyId}
+            </if>
+            <if test="productType!=null and productType!=0">
+                AND p.productType = #{productType}
+            </if>
+            <if test="objectName!=null and objectName!=''">
+                AND po.objectName like '#{objectName}'
+            </if>
+            <if test="dutyTypeId!=null and dutyTypeId!=0">
+                AND p.dutyTypeId = #{dutyTypeId}
+            </if>
+            <if test="acreId!=null and acreId!=0">
+                AND p.acreId = #{acreId}
+            </if>
+            <if test="startDate != null and startDate!=''">
+                AND DATE_FORMAT(p.createDate, '%Y-%m-%d') &gt;= DATE_FORMAT(#{startDate}, '%Y-%m-%d')
+            </if>
+            <if test="endDate != null and endDate!=''">
+                AND DATE_FORMAT(p.createDate, '%Y-%m-%d') &lt;= DATE_FORMAT(#{endDate}, '%Y-%m-%d')
+            </if>
+        </where>
+        ORDER BY p.createDate
+    </select>
+
     <select id="queryProductById" resultType="HashMap">
-        SELECT p.id, p.productNo, pt.typeName, po.objectName,pdt.name AS dutyTypeName,
-                                  ps.name AS standardName, sc.companyName,su.userName,p.createDate,p.owner,sc.areaId
+        SELECT p.id,
+        p.productNo,
+        pt.typeName,
+        po.objectName,
+        pdt.name AS dutyTypeName,
+        ps.name AS standardName,
+        p.processNo,
+        p.owner,
+        sc.companyName,
+        su.userName,
+        p.productDate,
+        p.createDate,
+        sc.areaId,
+        ca.acreName
         FROM product p
             LEFT JOIN product_object po ON p.objectId = po.objectId
         LEFT JOIN product_type pt ON p.productType = pt.typeId
@@ -64,6 +121,7 @@
             LEFT JOIN productive_standard ps ON p.standardId = ps.standardId
             LEFT JOIN sys_company sc ON p.companyId = sc.companyId
             LEFT JOIN sys_user su ON p.cUserId = su.userId
+        LEFT JOIN company_acre ca ON p.acreId = ca.acreId
         WHERE p.id = #{id}
     </select>
     <select id="queryProductType" resultType="HashMap">
@@ -102,8 +160,13 @@
               AND openFlag = 1
         ORDER BY createDate
     </select>
+    <select id="queryDutyTypeList" resultType="HashMap">
+        SELECT *
+        FROM product_duty_type
+        WHERE openFlag = 1
+    </select>
 
     <select id="getProductSequence" resultType="Integer">
-        SELECT product_seq_nextval(#{companyId}, #{iyear});
+        SELECT product_next_val(#{companyId}, #{iyear});
     </select>
 </mapper>

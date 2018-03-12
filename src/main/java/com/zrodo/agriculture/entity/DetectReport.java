@@ -1,22 +1,39 @@
 package com.zrodo.agriculture.entity;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
+import java.util.List;
 
 public class DetectReport {
-
+    @ApiModelProperty(name = "detectId", value = "自增id", hidden = true)
     private int detectId;
+    @ApiModelProperty(name = "sampleId", value = "样品Id", required = true)
     private int sampleId;
+    @ApiModelProperty(name = "companyId", value = "企业Id", required = true)
     private int companyId;
+    @ApiModelProperty(name = "productId", value = "产品id", required = true)
+    private int productId;
+    @ApiModelProperty(name = "productTypeId", value = "产品类型id", required = true)
     private int productTypeId;
+    @ApiModelProperty(name = "itemId", value = "检测项目", required = true)
     private int itemId;
+    @ApiModelProperty(name = "reagentId", value = "检测方法", required = true)
     private int reagentId;
-    private int objectId;
+    @ApiModelProperty(name = "sourceId", value = "检测来源", required = true)
     private int sourceId;
+    @ApiModelProperty(name = "resultId", value = "检测结果", required = true)
     private int resultId;
+    @ApiModelProperty(name = "detectUserId", value = "检测人", required = true)
     private int detectUserId;
+    @ApiModelProperty(name = "detectDate", value = "检测时间", required = true)
     private Date detectDate;
+    @ApiModelProperty(name = "reviewFlag", value = "是否复核", required = true)
     private String reviewFlag;
+    @ApiModelProperty(name = "imageUrl", value = "检测图片", required = false)
     private String imageUrl;
+    @ApiModelProperty(name = "imageUrls", value = "检测图片", required = true)
+    private List<String> imageUrls;
 
     public int getDetectId() {
         return detectId;
@@ -42,6 +59,14 @@ public class DetectReport {
         this.companyId = companyId;
     }
 
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
     public int getProductTypeId() {
         return productTypeId;
     }
@@ -64,14 +89,6 @@ public class DetectReport {
 
     public void setReagentId(int reagentId) {
         this.reagentId = reagentId;
-    }
-
-    public int getObjectId() {
-        return objectId;
-    }
-
-    public void setObjectId(int objectId) {
-        this.objectId = objectId;
     }
 
     public int getSourceId() {
@@ -120,5 +137,13 @@ public class DetectReport {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public List<String> getImageUrls() {
+        return imageUrls;
+    }
+
+    public void setImageUrls(List<String> imageUrls) {
+        this.imageUrls = imageUrls;
     }
 }

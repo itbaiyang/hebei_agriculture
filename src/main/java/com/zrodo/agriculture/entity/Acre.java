@@ -4,19 +4,22 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class Acre {
 
-    @ApiModelProperty(name = "acreId", value = "地块id（修改删除）", required = false)
+    @ApiModelProperty(name = "acreId", value = "地块id", hidden = true)
     private int acreId;
     @ApiModelProperty(name = "acreName", value = "地块名称（可修改）", required = false)
     private String acreName;
-    @ApiModelProperty(name = "companyId", value = "公司id（可修改）", required = false)
-    private String companyId;
+    @ApiModelProperty(name = "companyId", value = "公司id", hidden = true)
+    private int companyId;
     @ApiModelProperty(name = "size", value = "地块大小（可修改）", required = false)
     private float size;
     @ApiModelProperty(name = "typeId", value = "地块类型id", required = false)
     private int typeId;
-
     @ApiModelProperty(name = "address", value = "地块位置", required = false)
     private String address;
+    @ApiModelProperty(name = "longitude", value = "经度", required = false)
+    private String longitude;
+    @ApiModelProperty(name = "latitude", value = "纬度", required = false)
+    private String latitude;
     @ApiModelProperty(name = "imgList", value = "地块图片", required = false)
     private String[] imgList;
 
@@ -36,11 +39,11 @@ public class Acre {
         this.acreName = acreName;
     }
 
-    public String getCompanyId() {
+    public int getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(String companyId) {
+    public void setCompanyId(int companyId) {
         this.companyId = companyId;
     }
 
@@ -67,6 +70,22 @@ public class Acre {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
     }
 
     public String[] getImgList() {

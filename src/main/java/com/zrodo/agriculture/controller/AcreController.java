@@ -32,7 +32,7 @@ public class AcreController {
     public String insertAcre(HttpServletRequest request,
                              @ModelAttribute Acre acre) {
         AccountInfo user = Token.getUser(request);
-        acre.setCompanyId(user.getDeptId());
+        acre.setCompanyId(user.getCompanyId());
         String json;
         try {
             int id = acreMapper.insertAcre(acre);
@@ -81,7 +81,8 @@ public class AcreController {
     @DeleteMapping(value = "deleteAcreImg")
     @ApiOperation(value = "删除地块图片", notes = "")
     public String deleteAcreImg(HttpServletRequest request,
-                                @ApiParam(required = true, name = "id", value = "图片Id") @RequestParam(value = "id", required = false) int id) {
+                                @ApiParam(required = true, name = "id", value = "图片Id")
+                                @RequestParam(value = "id") int id) {
         String json = null;
         try {
             acreMapper.deleteAcreImg(id);
