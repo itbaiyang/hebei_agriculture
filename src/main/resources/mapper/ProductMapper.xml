@@ -27,7 +27,8 @@
     </update>
 
     <select id="queryProductList" resultType="HashMap">
-        SELECT p.id, p.productNo, pt.typeName, po.objectName,pdt.name AS dutyTypeName,p.productDate,
+        SELECT p.id, p.productNo, pt.typeName,p.productType AS productTypeId, po.objectName,pdt.name AS
+        dutyTypeName,p.productDate,
         ps.name AS standardName, sc.companyName,su.userName,p.createDate,sc.areaId,
         (SELECT count(*) FROM sample s WHERE s.productId = p.id) AS sampleCount
         FROM product p
@@ -124,9 +125,10 @@
         LEFT JOIN company_acre ca ON p.acreId = ca.acreId
         WHERE p.id = #{id}
     </select>
-    <select id="queryProductType" resultType="HashMap">
-        SELECT id, typeName
+    <select id="queryProductTypeById" resultType="String">
+        SELECT symbol
         FROM product_type
+        WHERE typeId = #{id}
     </select>
 
     <select id="existObject" resultType="Integer">

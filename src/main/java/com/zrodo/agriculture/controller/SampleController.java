@@ -4,6 +4,7 @@ import com.zrodo.agriculture.domain.AccountInfo;
 import com.zrodo.agriculture.entity.Sample;
 import com.zrodo.agriculture.repository.ProductMapper;
 import com.zrodo.agriculture.repository.SampleMapper;
+import com.zrodo.agriculture.service.SampleService;
 import com.zrodo.agriculture.util.Page;
 import com.zrodo.agriculture.util.Token;
 import com.zrodo.agriculture.util.Tool;
@@ -28,6 +29,8 @@ public class SampleController {
     private SampleMapper sampleMapper;
 
     @Autowired
+    private SampleService sampleService;
+    @Autowired
     private ProductMapper productMapper;
 
     @PostMapping(value = "insertSample")
@@ -38,7 +41,7 @@ public class SampleController {
 //        sample.setcUserId(user.getId());
         String json;
         try {
-            int id = sampleMapper.addSample(sample);
+            sampleService.addSample(sample);
             json = JsonStatus.success();
         } catch (Exception e) {
             e.printStackTrace();

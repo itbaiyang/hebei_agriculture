@@ -6,79 +6,72 @@ import java.util.Date;
 
 public class Sample {
     @ApiModelProperty(name = "id", value = "自增id", hidden = true)
-    private int id;
+    private Integer id;
     @ApiModelProperty(name = "sampleNo", value = "样品编号", hidden = true)
-    private int sampleNo;
+    private String sampleNo;
     @ApiModelProperty(name = "productId", value = "产品Id")
-    private int productId;
+    private Integer productId;
     @ApiModelProperty(name = "sampleId", value = "采样部位Id（蓄水）")
-    private int sampleId;
+    private Integer sampleId;
     @ApiModelProperty(name = "tacheId", value = "采样环节")
-    private int tacheId;
+    private Integer tacheId;
     @ApiModelProperty(name = "cUserId", value = "采样人")
-    private int cUserId;
+    private Integer cUserId;
     @ApiModelProperty(name = "sampleDate", value = "采样时间")
     private String sampleDate;
     @ApiModelProperty(name = "createDate", value = "创建时间", hidden = true)
     private Date createDate;
-//    @ApiModelProperty(name = "sampleUrl", value = "采样图片")
-//    private String sampleUrl;
-//    @ApiModelProperty(name = "sampleVideoUrl", value = "采样视频")
-//    private String sampleVideoUrl;
-//    @ApiModelProperty(name = "sampleSource", value = "采样来源")
-//    private String sampleSource;
-//    @ApiModelProperty(name = "sampleTemp", value = "采样温度")
-//    private String sampleTemp;
+    @ApiModelProperty(name = "productTypeId", value = "产品id")
+    private Integer productTypeId;
 
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getSampleNo() {
+    public String getSampleNo() {
         return sampleNo;
     }
 
-    public void setSampleNo(int sampleNo) {
+    public void setSampleNo(String sampleNo) {
         this.sampleNo = sampleNo;
     }
 
-    public int getProductId() {
+    public Integer getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(Integer productId) {
         this.productId = productId;
     }
 
-    public int getSampleId() {
+    public Integer getSampleId() {
         return sampleId;
     }
 
-    public void setSampleId(int sampleId) {
+    public void setSampleId(Integer sampleId) {
         this.sampleId = sampleId;
     }
 
-    public int getTacheId() {
+    public Integer getTacheId() {
         return tacheId;
     }
 
-    public void setTacheId(int tacheId) {
+    public void setTacheId(Integer tacheId) {
         this.tacheId = tacheId;
     }
 
-    public int getcUserId() {
+    public Integer getcUserId() {
         return cUserId;
     }
 
-    public void setcUserId(int cUserId) {
+    public void setcUserId(Integer cUserId) {
         this.cUserId = cUserId;
     }
-
 
     public String getSampleDate() {
         return sampleDate;
@@ -94,5 +87,13 @@ public class Sample {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public Integer getProductTypeId() {
+        return productTypeId;
+    }
+
+    public void setProductTypeId(Integer productTypeId) {
+        this.productTypeId = productTypeId;
     }
 }

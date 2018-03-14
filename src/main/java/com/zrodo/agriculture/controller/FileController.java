@@ -32,6 +32,7 @@ public class FileController {
             String fileName = file.getOriginalFilename();
             InputStream inputStream = file.getInputStream();
             String filePath = null;
+
             Boolean flag = FtpFileUtil.uploadFile(fileName, inputStream, type);
             if (!flag) {
                 return JsonStatus.failure();

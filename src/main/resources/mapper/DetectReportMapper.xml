@@ -160,4 +160,21 @@
     <delete id="deleteDetectImages">
         DELETE FROM detect_img WHERE detectId = #{detectId}
     </delete>
+
+    <insert id="insertCompanyThird" parameterType="com.zrodo.agriculture.entity.CompanyThird"
+            useGeneratedKeys="true" keyProperty="companyId">
+        INSERT INTO company_third (companyName, createDate, createUserId)
+        VALUES (#{companyName}, #{createDate}, #{createUserId})
+    </insert>
+
+    <select id="queryCompanyThirdByName" resultType="Integer">
+        SELECT companyId
+        FROM company_third ct
+        WHERE ct.companyName = #{companyName}
+        LIMIT 1
+    </select>
+
+    <select id="getCompanyThird" resultType="String">
+        select companyName from company_third
+    </select>
 </mapper>

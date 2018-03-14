@@ -10,7 +10,7 @@ public class DetectReport {
     private int detectId;
     @ApiModelProperty(name = "sampleId", value = "样品Id", required = true)
     private int sampleId;
-    @ApiModelProperty(name = "companyId", value = "企业Id", required = true)
+    @ApiModelProperty(name = "companyId", value = "企业Id", required = false, hidden = true)
     private int companyId;
     @ApiModelProperty(name = "productId", value = "产品id", required = true)
     private int productId;
@@ -28,6 +28,10 @@ public class DetectReport {
     private int detectUserId;
     @ApiModelProperty(name = "detectDate", value = "检测时间", required = true)
     private Date detectDate;
+    @ApiModelProperty(name = "companyDetectName", value = "检测单位名称", required = true)
+    private String companyDetectName;
+    @ApiModelProperty(name = "companyDetectId", value = "检测单位Id", required = false)
+    private String companyDetectId;
     @ApiModelProperty(name = "reviewFlag", value = "是否复核", required = true)
     private String reviewFlag;
     @ApiModelProperty(name = "imageUrl", value = "检测图片", required = false)
@@ -121,6 +125,22 @@ public class DetectReport {
 
     public void setDetectDate(Date detectDate) {
         this.detectDate = detectDate;
+    }
+
+    public String getCompanyDetectName() {
+        return companyDetectName;
+    }
+
+    public void setCompanyDetectName(String companyDetectName) {
+        this.companyDetectName = companyDetectName;
+    }
+
+    public String getCompanyDetectId() {
+        return companyDetectId;
+    }
+
+    public void setCompanyDetectId(String companyDetectId) {
+        this.companyDetectId = companyDetectId;
     }
 
     public String getReviewFlag() {

@@ -49,6 +49,8 @@ public interface ProductMapper {
 
     void insertObject(TObject tObject);
 
+    String queryProductTypeById(@Param("id") int id);
+
     Integer getProductSequence(@Param("companyId") int companyId,
                                @Param("iyear") int iyear);
 }

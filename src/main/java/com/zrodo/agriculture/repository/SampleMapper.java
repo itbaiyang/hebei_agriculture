@@ -41,4 +41,6 @@ public interface SampleMapper {
 
     Map<String, Object> querySampleById(Integer id);
 
+    String getSampleNos(@Param("sampleNo") String sampleNo);
+
 }

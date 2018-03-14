@@ -1,5 +1,6 @@
 package com.zrodo.agriculture.repository;
 
+import com.zrodo.agriculture.entity.CompanyThird;
 import com.zrodo.agriculture.entity.DetectReport;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -41,5 +42,11 @@ public interface DetectReportMapper {
     void addDetectImages(@Param("detectId") int detectId, @Param("url") String url);
 
     void deleteDetectImages(Integer detectId);
+
+    void insertCompanyThird(CompanyThird companyThird);
+
+    Integer queryCompanyThirdByName(@Param("companyName") String companyName);
+
+    List<String> getCompanyThird();
 
 }

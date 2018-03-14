@@ -125,4 +125,11 @@
         ORDER BY createDate
         LIMIT #{startNo},#{pageSize}
     </select>
+
+    <select id="getSampleNos" resultType="String">
+        SELECT MAX(s.sampleNo)
+        FROM sample s
+        WHERE s.sampleNo LIKE CONCAT('${sampleNo}', '%')
+        ORDER BY s.id DESC
+    </select>
 </mapper>
